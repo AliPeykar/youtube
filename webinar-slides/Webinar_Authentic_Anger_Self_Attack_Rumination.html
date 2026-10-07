@@ -218,160 +218,360 @@ body.notes-on #chrome{bottom:calc(40vh + 10px)}
   .slide{position:relative;opacity:1;visibility:visible;break-after:page;page-break-after:always;transition:none}
   #chrome,#notes{display:none!important}
 }
+
+/* ===== interactive layer ===== */
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--cedar);outline-offset:4px;border-radius:12px}
+#stage{user-select:none;-webkit-user-select:none}
+textarea{user-select:text;-webkit-user-select:text}
+.en{display:block}
+.ar{opacity:var(--o,.9)}
+.ar.soft{--o:.55}
+
+/* progress bar */
+#bar{position:fixed;top:0;left:0;right:0;height:4px;z-index:6}
+#bar i{display:block;height:100%;width:0;background:var(--cedar);transition:width .45s ease}
+
+/* entrance animations */
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.slide.active .t{animation:rise .6s ease backwards}
+.slide.active .kicker{animation:rise .7s ease backwards}
+.slide.active .cover-t{animation:rise .9s .05s ease backwards}
+.slide.active .cover-sub{animation:rise .8s .35s ease backwards}
+.slide.active .cover-tiny{animation:rise .8s .6s ease backwards}
+.slide.active .prow:nth-child(1){animation:rise .8s 1s ease backwards}
+.slide.active .prow:nth-child(2){animation:rise .8s 1.3s ease backwards}
+.start-hint{position:absolute;left:130px;bottom:56px;font-size:28px;color:var(--grey)}
+.slide.active .start-hint{animation:rise .8s 2s ease backwards,pulse 2.6s 3s infinite}
+kbd{display:inline-block;min-width:44px;text-align:center;padding:0 12px;border:2px solid var(--taupe);border-bottom-width:4px;border-radius:10px;font:inherit;color:var(--cocoa);background:#fff;line-height:1.35}
+.slide.active .stg>*{animation:rise .55s ease backwards;animation-delay:calc(var(--i,0)*90ms + .15s)}
+
+/* fragments */
+.fr{transition:opacity .55s ease var(--d,0s),transform .55s ease var(--d,0s)}
+.fr:not(.on){opacity:0;transform:translateY(16px);pointer-events:none}
+.fr.on{opacity:var(--o,1);transform:none}
+.loop.fr,.loop.fr:not(.on){opacity:1;transform:none}
+.loop .p1{stroke-dasharray:1600;stroke-dashoffset:1600;transition:stroke-dashoffset 1.1s ease}
+.loop.on .p1{stroke-dashoffset:0}
+.loop .p2{opacity:0;transition:opacity .3s}
+.loop.on .p2{opacity:1;transition-delay:1s}
+.vr.fr:not(.on){transform:none}
+
+/* chips / buttons */
+.chip{display:inline-block;font-size:28px;line-height:1.6;padding:2px 30px;border-radius:99px;border:2px solid var(--cedar);color:var(--cedar);background:#fff;transition:background .2s,color .2s,transform .2s}
+.chip:hover{transform:translateY(-2px)}
+.chip.on{background:var(--cedar);color:#fff}
+.chip.ghost{border-color:var(--taupe);color:var(--grey)}
+.chips{position:absolute;top:116px;left:130px;display:flex;gap:14px;direction:rtl}
+.tools{position:absolute;top:36px;left:130px;display:flex;gap:16px}
+.timer{position:absolute;top:30px;left:130px;display:flex;align-items:center;gap:20px}
+.time{font-size:52px;font-weight:700;color:var(--cinn);min-width:150px;text-align:center;line-height:1.2;font-variant-numeric:tabular-nums}
+.time.done{color:var(--red);animation:pulse 1s infinite}
+
+/* selectable cards */
+.card.pick{display:block;width:100%;text-align:right;position:relative;transition:border-color .25s,background .25s,box-shadow .25s,transform .25s,opacity .35s}
+.card.pick:hover{border-color:var(--cedar);transform:translateY(-4px)}
+.card.pick.sel{border-color:var(--cedar);background:#fff;box-shadow:0 14px 34px rgba(66,86,78,.16);transform:translateY(-6px)}
+.single.has-sel .pick:not(.sel){opacity:.42}
+.detail{position:absolute;top:790px;right:130px;left:130px;min-height:100px;font-size:36px;line-height:1.6;color:var(--grey);transition:color .3s}
+.detail.on{color:var(--cedar-d)}
+#s5 .foot.low{top:925px}
+.study.pick{display:flex;flex-direction:column;height:470px}
+.study .tg{display:block}
+.crit.pick{padding:36px 44px}
+.crit .q{display:block;margin-top:14px;font-size:38px;line-height:1.5}
+.crit.sel{border-color:var(--cinn)}
+.crit.sel::before{content:"✓";position:absolute;top:20px;left:22px;width:44px;height:44px;border-radius:50%;background:var(--cinn);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1}
+.tally{position:absolute;top:870px;right:130px;font-size:40px;font-weight:700;color:var(--cinn)}
+.tally[hidden]{display:none}
+
+/* voices */
+.vo.pick{padding:14px 26px;border:2px solid transparent;border-radius:22px;transition:background .25s,border-color .25s,opacity .35s,transform .25s;text-align:right}
+.vo.pick:hover{border-color:var(--taupe);transform:translateY(-3px)}
+.vo.pick.sel{background:var(--tint);border-color:var(--cedar)}
+.vo.pick.sel .ring{background:var(--cedar);color:#fff}
+.vo .vq{font-size:44px;line-height:1.4}
+.vo.sel .vq{font-weight:700}
+.result{position:absolute;top:930px;right:130px;left:130px;font-size:38px;color:var(--cedar-d);display:flex;align-items:center;gap:16px}
+.result[hidden]{display:none}
+.lbl2,.sug .lbl,.result .lbl{color:var(--grey)}
+.ty{font-weight:700;color:var(--cinn)}
+
+/* exercise 2 yes/no */
+.qs{left:130px}
+.qs li{width:100%}
+.yn{margin-inline-start:auto;display:flex;gap:14px}
+.yn .chip[data-yn="0"].on{background:var(--cinn);border-color:var(--cinn)}
+.callout{display:block;width:1660px;text-align:right;transition:opacity .4s,box-shadow .4s,transform .4s}
+.callout.dim{opacity:.35}
+.callout.lit{opacity:1;box-shadow:0 12px 34px rgba(127,78,52,.18);transform:translateY(-3px)}
+
+/* focus lanes */
+.lane{transition:opacity .45s ease}
+.two[data-focus="brown"] .lane.green,.two[data-focus="green"] .lane.brown{opacity:.12}
+
+/* workspace */
+.ws{grid-template-rows:repeat(2,330px)}
+.ws .card{display:flex;flex-direction:column;padding:34px 40px}
+.ws .card h3{font-size:44px;margin-bottom:8px}
+.ws .card p{font-size:30px}
+.ws textarea{flex:1;min-height:70px;margin-top:14px;resize:none;border:2px dashed var(--taupe);border-radius:14px;background:transparent;padding:10px 16px;font:inherit;font-size:28px;line-height:1.6;color:var(--cocoa);direction:rtl;transition:border-color .25s,background .25s}
+.ws textarea:focus{outline:none;border-color:var(--cedar);border-style:solid;background:var(--tint)}
+
+/* self-location */
+.loc.pick{display:block;height:530px;padding:38px 30px}
+.loc .n{display:block;font-size:68px;font-weight:700;color:var(--cinn);line-height:1.2}
+.loc .h{display:block;margin:14px 0 16px;font-size:36px;font-weight:700;line-height:1.35}
+.loc .d{display:block;font-size:30px;line-height:1.55;color:var(--cedar-d)}
+.loc.last{border-color:var(--cedar);border-width:3px}
+.loc.last .n{color:var(--cedar)}
+.sug{position:absolute;top:835px;right:130px;left:130px;font-size:34px;line-height:2;color:var(--cedar-d);display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.sug[hidden]{display:none}
+.sug .chip{font-size:30px}
+.sug.on{animation:rise .45s ease backwards}
+.foot.bot{top:978px;font-size:28px}
+
+/* overview */
+#ov{position:fixed;inset:0;z-index:10;overflow:auto;padding:44px 5vw 60px;background:rgba(234,229,221,.97);display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;counter-reset:sl;direction:rtl;align-content:start}
+#ov[hidden]{display:none}
+.th{position:relative;display:block;width:100%;aspect-ratio:16/9;border:3px solid transparent;border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;box-shadow:0 2px 12px rgba(58,42,34,.12);transition:transform .2s,border-color .2s}
+.th:hover{transform:translateY(-3px);border-color:var(--taupe)}
+.th.cur{border-color:var(--cedar)}
+.th .slide{position:absolute;top:0;left:0;opacity:1;visibility:visible;transform-origin:0 0;transition:none;pointer-events:none}
+.th .slide *{animation:none!important}
+.th .fr,.th .fr:not(.on){opacity:var(--o,1);transform:none}
+.th .loop .p1{stroke-dashoffset:0}.th .loop .p2{opacity:1}
+.th .single.has-sel .pick:not(.sel){opacity:1}
+.th .timer,.th .tools,.th .chips{display:none}
+
+@media print{
+  .fr,.fr:not(.on){opacity:var(--o,1)!important;transform:none!important;pointer-events:auto}
+  .loop .p1{stroke-dashoffset:0!important}.loop .p2{opacity:1!important}
+  .single.has-sel .pick:not(.sel){opacity:1!important}
+  .callout.dim{opacity:1}
+  .timer,.tools,.chips,.start-hint,#bar,#ov{display:none!important}
+  .slide *{animation:none!important}
+  body.print-one .slide{display:none!important}
+  body.print-one .slide.print-target{display:block!important}
+  .ws textarea{border:1.5px solid var(--taupe);background:#fff}
+}
+@media (prefers-reduced-motion:reduce){
+  .fr,.slide .stg>*,.slide .t{transition:none!important;animation:none!important}
+}
+.slide>p,.slide>h1,.slide>.cite,.slide>.foot{pointer-events:none}
+.slide>.result,.slide>.sug,.slide>.detail{pointer-events:auto}
+.ws{grid-template-rows:repeat(2,316px)}
+.qs{left:auto;width:1400px}
+.th .slide{right:auto;bottom:auto;left:0;top:0}
+#ov{background:#EAE5DD}
 </style>
 </head>
 <body>
+<div id="bar" aria-hidden="true"><i></i></div>
 <div id="viewport"><div id="stage">
 <section class="slide cover nonum" id="s1" aria-label="جلد" data-n="1">
   <h1 class="cover-t">چرا وقتی حق داریم عصبانی باشیم،<br>خودمان را سرزنش می‌کنیم؟</h1>
   <p class="cover-sub">از خشم اصیل تا خودحمله و نشخوار فکری</p>
   <p class="cover-tiny">یک مسیر کاربردی بر پایه سه پژوهش کیفی جدید</p>
   <div class="paths">
-    <div class="prow green"><span>خشم</span><svg class="ar " viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>مرز</span><svg class="ar " viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><b>اقدام</b></div>
-    <div class="prow brown"><span>خشم</span><svg class="ar " viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>خودسرزنشی</span><svg class="ar " viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>نشخوار</span><svg class="ar " viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><b>حمله به خود</b><i class="dot"></i></div>
-  </div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب از همان ابتدا خودش را در سؤال ببیند و بداند مسیر امروز کجا می‌رود.</p><h4>متن پیشنهادی ارائه</h4><p>«سلام و خوش آمدید. امروز درباره تجربه‌ای حرف می‌زنیم که خیلی از ما می‌شناسیم: کسی ما را ناراحت یا عصبانی می‌کند، حق هم داریم، اما کمی بعد به‌جای او، خودمان را زیر سؤال می‌بریم. قرار نیست امروز جواب قطعی بدهم؛ قرار است با هم یک مسیر را ببینیم: از خشم، تا سرزنش خود و فکر کردن‌های تکراری، و بعد یک مسیر جایگزین. کمک می‌کنم این الگو را ببینیم و بهتر بفهمیم.»</p><h4>نکته علمی</h4><p>«سه پژوهش کیفی جدید» اشاره به سه مقاله‌ای است که در اسلاید آخر فهرست شده‌اند (Šoková و همکاران، ۲۰۲۵؛ Oblak و همکاران، ۲۰۲۶؛ Khan و Rehna و Butt، ۲۰۲۴). دو مسیر پایین اسلاید، «چارچوب آموزشی وبینار» است؛ نه مدل منتشرشده یک مقاله. یادآوری: این یادداشت‌ها بر پایه ساختار و شرح مستند وبینار نوشته شده‌اند؛ پیش از ارائه، عبارت دقیق هر ادعای پژوهشی را یک بار با متن مقاله تطبیق دهید.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید از یک لحظه ساده شروع کنیم؛ لحظه‌ای که کسی ما را ناراحت می‌کند.»</p></template></section>
+    <div class="prow green"><span>خشم</span><svg class="ar "  viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>مرز</span><svg class="ar "  viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><b>اقدام</b></div>
+    <div class="prow brown"><span>خشم</span><svg class="ar "  viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>خودسرزنشی</span><svg class="ar "  viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>نشخوار</span><svg class="ar "  viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><b>حمله به خود</b><i class="dot"></i></div>
+  </div>
+  <p class="start-hint">برای شروع، کلید <kbd>←</kbd> را بزنید</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب از همان ابتدا خودش را در سؤال ببیند و بداند مسیر امروز کجا می‌رود.</p><h4>متن پیشنهادی ارائه</h4><p>«سلام و خوش آمدید. امروز درباره تجربه‌ای حرف می‌زنیم که خیلی از ما می‌شناسیم: کسی ما را ناراحت یا عصبانی می‌کند، حق هم داریم، اما کمی بعد به‌جای او، خودمان را زیر سؤال می‌بریم. قرار نیست امروز جواب قطعی بدهم؛ قرار است با هم یک مسیر را ببینیم: از خشم، تا سرزنش خود و فکر کردن‌های تکراری، و بعد یک مسیر جایگزین. کمک می‌کنم این الگو را ببینیم و بهتر بفهمیم.»</p><h4>نکته علمی</h4><p>«سه پژوهش کیفی جدید» اشاره به سه مقاله‌ای است که در اسلاید آخر فهرست شده‌اند (Šoková و همکاران، ۲۰۲۵؛ Oblak و همکاران، ۲۰۲۶؛ Khan و Rehna و Butt، ۲۰۲۴). دو مسیر پایین اسلاید، «چارچوب آموزشی وبینار» است؛ نه مدل منتشرشده یک مقاله. یادآوری: این یادداشت‌ها بر پایه ساختار و شرح مستند وبینار نوشته شده‌اند؛ پیش از ارائه، عبارت دقیق هر ادعای پژوهشی را یک بار با متن مقاله تطبیق دهید.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید از یک لحظه ساده شروع کنیم؛ لحظه‌ای که کسی ما را ناراحت می‌کند.»</p></template></section>
 <section class="slide bare" id="s2" aria-label="سؤال آغازین" data-n="2">
   <h1 class="sr">آخرین بار که کسی ناراحتتان کرد</h1>
   <p class="kicker">آخرین بار که کسی ناراحتتان کرد...</p>
-  <p class="huge a">با او چه کردید؟</p>
-  <p class="huge b">و با <em>خودتان</em> چه کردید؟</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب برای چند ثانیه سکوت کند و تفاوت واکنش به دیگری و واکنش به خودش را حس کند.</p><h4>متن پیشنهادی ارائه</h4><p>«آخرین باری را که کسی ناراحتتان کرد به یاد بیاورید... با او چه کردید؟ شاید چیزی گفتید، شاید هیچ‌چیز نگفتید. حالا سؤال دوم: با خودتان چه کردید؟ (مکث) خیلی از ما در این لحظه، بیشتر از آن‌که به آن آدم فکر کنیم، با خودمان درگیر می‌شویم. امروز دقیقاً از همین نقطه شروع می‌کنیم.»</p><h4>نکته علمی</h4><p>این اسلاید یک سؤال تأمل‌برانگیز آموزشی است و ادعای پژوهشی ندارد.</p><h4>انتقال به اسلاید بعد</h4><p>«این همان جایی است که مسئله شروع می‌شود؛ بیایید دو مسیر ممکن را کنار هم ببینیم.»</p></template></section>
+  <p class="huge a" data-f="1">با او چه کردید؟</p>
+  <p class="huge b" data-f="2">و با <em>خودتان</em> چه کردید؟</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب برای چند ثانیه سکوت کند و تفاوت واکنش به دیگری و واکنش به خودش را حس کند.</p><h4>متن پیشنهادی ارائه</h4><p>«آخرین باری را که کسی ناراحتتان کرد به یاد بیاورید... با او چه کردید؟ شاید چیزی گفتید، شاید هیچ‌چیز نگفتید. حالا سؤال دوم: با خودتان چه کردید؟ (مکث) خیلی از ما در این لحظه، بیشتر از آن‌که به آن آدم فکر کنیم، با خودمان درگیر می‌شویم. امروز دقیقاً از همین نقطه شروع می‌کنیم.»</p><h4>نکته علمی</h4><p>این اسلاید یک سؤال تأمل‌برانگیز آموزشی است و ادعای پژوهشی ندارد.</p><h4>انتقال به اسلاید بعد</h4><p>«این همان جایی است که مسئله شروع می‌شود؛ بیایید دو مسیر ممکن را کنار هم ببینیم.»</p></template></section>
 <section class="slide " id="s3" aria-label="مسئله" data-n="3">
   <h1 class="t">مسئله از همین‌جا شروع می‌شود</h1>
   <div class="two">
-    <div class="lane green"><h2>مسیر اول</h2><div class="nd">اتفاق</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">خشم</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">نیاز / مرز</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last">اقدام</div></div>
-    <span class="vr"></span>
-    <div class="lane brown"><h2>مسیر دوم</h2><div class="nd">اتفاق</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">شرم / ترس</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">خودسرزنشی</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">نشخوار</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last">حمله به خود</div></div>
+    <div class="lane green"><h2 data-f="1">مسیر اول</h2><div class="nd" data-f="1" style="--d:0.18s">اتفاق</div><svg class="ad " data-f="1" style="--d:0.27s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:0.36s">خشم</div><svg class="ad " data-f="1" style="--d:0.44999999999999996s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:0.54s">نیاز / مرز</div><svg class="ad " data-f="1" style="--d:0.63s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last" data-f="1" style="--d:0.72s">اقدام</div></div>
+    <span class="vr" data-f="2"></span>
+    <div class="lane brown"><h2 data-f="2">مسیر دوم</h2><div class="nd" data-f="2" style="--d:0.18s">اتفاق</div><svg class="ad " data-f="2" style="--d:0.27s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.36s">شرم / ترس</div><svg class="ad " data-f="2" style="--d:0.44999999999999996s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.54s">خودسرزنشی</div><svg class="ad " data-f="2" style="--d:0.63s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.72s">نشخوار</div><svg class="ad " data-f="2" style="--d:0.8099999999999999s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last" data-f="2" style="--d:0.8999999999999999s">حمله به خود</div></div>
   </div>
-  <p class="foot low">چارچوب آموزشی وبینار؛ نه یک مدل واحد منتشرشده</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب ببیند که از یک اتفاق مشابه، دو مسیر کاملاً متفاوت ممکن است شروع شود.</p><h4>متن پیشنهادی ارائه</h4><p>«فرض کنید اتفاقی می‌افتد. در مسیر اول، خشم به ما خبر می‌دهد چیزی مهم است؛ نیاز یا مرزی در کار است و به اقدام می‌رسیم. در مسیر دوم، همان اتفاق با شرم یا ترس همراه می‌شود، منتقد درونی بالا می‌آید، ذهن شروع به تحلیل کردن می‌کند و آخرش حمله به خودمان است. نمی‌گویم یکی همیشه درست و دیگری همیشه غلط است؛ می‌گویم هر دو مسیر برای خیلی از ما آشناست.»</p><h4>نکته علمی</h4><p>هر دو مسیر روی اسلاید «چارچوب آموزشی وبینار» است؛ ترکیبی از مفاهیم سه پژوهش، نه یک مدل واحد منتشرشده. باید همین‌طور هم معرفی شود.</p><h4>انتقال به اسلاید بعد</h4><p>«برای فهمیدن مسیر اول، اول باید با خود خشم دوست شویم.»</p></template></section>
+  <p class="foot low" data-f="2" style="--d:1s">چارچوب آموزشی وبینار؛ نه یک مدل واحد منتشرشده</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب ببیند که از یک اتفاق مشابه، دو مسیر کاملاً متفاوت ممکن است شروع شود.</p><h4>متن پیشنهادی ارائه</h4><p>«فرض کنید اتفاقی می‌افتد. در مسیر اول، خشم به ما خبر می‌دهد چیزی مهم است؛ نیاز یا مرزی در کار است و به اقدام می‌رسیم. در مسیر دوم، همان اتفاق با شرم یا ترس همراه می‌شود، منتقد درونی بالا می‌آید، ذهن شروع به تحلیل کردن می‌کند و آخرش حمله به خودمان است. نمی‌گویم یکی همیشه درست و دیگری همیشه غلط است؛ می‌گویم هر دو مسیر برای خیلی از ما آشناست.»</p><h4>نکته علمی</h4><p>هر دو مسیر روی اسلاید «چارچوب آموزشی وبینار» است؛ ترکیبی از مفاهیم سه پژوهش، نه یک مدل واحد منتشرشده. باید همین‌طور هم معرفی شود.</p><h4>انتقال به اسلاید بعد</h4><p>«برای فهمیدن مسیر اول، اول باید با خود خشم دوست شویم.»</p></template></section>
 <section class="slide bare" id="s4" aria-label="خشم" data-n="4">
   <h1 class="sr">خشم برابر پرخاشگری نیست</h1>
-  <div class="neq"><span class="a">خشم</span><span class="x">≠</span><span class="b">پرخاشگری</span></div>
-  <p class="midline">خشم می‌تواند یک «اطلاعات» باشد.</p>
-  <div class="trio"><p>ممکن است از یک مرز<br>خبر بدهد.</p><p>ممکن است یک نیاز<br>مهم را نشان دهد.</p><p>ممکن است ما را به سمت<br>اقدام هدایت کند.</p></div>
-  <p class="foot low c">اما خشم به‌خودی‌خود مجوز رفتار آسیب‌زننده نیست.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب خشم را از پرخاشگری جدا کند و آن را به‌عنوان «اطلاعات» ببیند.</p><h4>متن پیشنهادی ارائه</h4><p>«خشم و پرخاشگری یکی نیستند. پرخاشگری یک رفتار است؛ خشم یک احساس و می‌تواند اطلاعات بدهد: شاید مرزی رد شده، شاید نیازی نادیده مانده. این به آن معنا نیست که هر کاری با خشم موجه است. خشم به‌خودی‌خود مجوز رفتار آسیب‌زننده نیست؛ ولی نادیده گرفتنش هم کمکی نمی‌کند.»</p><h4>نکته علمی</h4><p>تمایز خشم و پرخاشگری و نگاه به خشم به‌عنوان اطلاعات، «ترجمه ساده‌شده» مفهوم خشم قاطعانه/محافظتی در ادبیات معاصر است؛ ادعای مستقیم یکی از سه مقاله نیست.</p><h4>انتقال به اسلاید بعد</h4><p>«خب؛ اگر خشم اطلاعات است، چرا بعضی وقت‌ها به‌جای اقدام، به خودمان می‌رسد؟ سه پژوهش به سه بخش از این پازل نگاه کرده‌اند.»</p></template></section>
+  <div class="neq"><span class="a">خشم</span><span class="x" data-f="1">≠</span><span class="b" data-f="1" style="--d:0.25s">پرخاشگری</span></div>
+  <p class="midline" data-f="2">خشم می‌تواند یک «اطلاعات» باشد.</p>
+  <div class="trio"><p data-f="3">ممکن است از یک مرز<br>خبر بدهد.</p><p data-f="3" style="--d:0.3s">ممکن است یک نیاز<br>مهم را نشان دهد.</p><p data-f="3" style="--d:0.6s">ممکن است ما را به سمت<br>اقدام هدایت کند.</p></div>
+  <p class="foot low c" data-f="3" style="--d:1s">اما خشم به‌خودی‌خود مجوز رفتار آسیب‌زننده نیست.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب خشم را از پرخاشگری جدا کند و آن را به‌عنوان «اطلاعات» ببیند.</p><h4>متن پیشنهادی ارائه</h4><p>«خشم و پرخاشگری یکی نیستند. پرخاشگری یک رفتار است؛ خشم یک احساس و می‌تواند اطلاعات بدهد: شاید مرزی رد شده، شاید نیازی نادیده مانده. این به آن معنا نیست که هر کاری با خشم موجه است. خشم به‌خودی‌خود مجوز رفتار آسیب‌زننده نیست؛ ولی نادیده گرفتنش هم کمکی نمی‌کند.»</p><h4>نکته علمی</h4><p>تمایز خشم و پرخاشگری و نگاه به خشم به‌عنوان اطلاعات، «ترجمه ساده‌شده» مفهوم خشم قاطعانه/محافظتی در ادبیات معاصر است؛ ادعای مستقیم یکی از سه مقاله نیست.</p><h4>انتقال به اسلاید بعد</h4><p>«خب؛ اگر خشم اطلاعات است، چرا بعضی وقت‌ها به‌جای اقدام، به خودمان می‌رسد؟ سه پژوهش به سه بخش از این پازل نگاه کرده‌اند.»</p></template></section>
 <section class="slide " id="s5" aria-label="سه پژوهش" data-n="5">
   <h1 class="t">سه پژوهش؛ سه قطعه از یک پازل</h1>
-  <div class="cards c3">
-    <div class="card study"><div class="yr">۲۰۲۵</div><div class="en g">BMC Psychology</div><div class="en ">Šoková et al.</div><div class="cs"><div class="en ">Inner Critic</div><div class="en ">Self-Criticism</div></div><p class="tg">پژوهش کیفی</p></div>
-    <div class="card study"><div class="yr">۲۰۲۶</div><div class="en g">Frontiers in Psychiatry</div><div class="en ">Oblak et al.</div><div class="cs"><div class="en ">Rumination</div></div><p class="tg">پژوهش پدیدارشناختی</p></div>
-    <div class="card study"><div class="yr">۲۰۲۴</div><div class="en g">Frontiers in Psychology</div><div class="en ">Khan, Rehna &amp; Butt</div><div class="cs"><div class="en ">Rumination</div><div class="en ">Emotional Turbulence</div></div><p class="tg">در افراد دارای NSSI</p></div>
+  <div class="cards c3 single" data-detail="d5">
+    <button class="card study pick" data-pick="منتقد درونی و سرزنش خود: صدایی که علیه خودمان قضاوت می‌کند." data-f="1"><span class="yr">۲۰۲۵</span><span class="en g">BMC Psychology</span><span class="en ">Šoková et al.</span><span class="cs"><span class="en ">Inner Critic</span><span class="en ">Self-Criticism</span></span><span class="tg">پژوهش کیفی</span></button>
+    <button class="card study pick" data-pick="نشخوار: فکر کردن تکراری‌ای که ظاهراً برای حل مسئله شروع می‌شود، اما گاهی ما را در همان نقطه نگه می‌دارد." data-f="2"><span class="yr">۲۰۲۶</span><span class="en g">Frontiers in Psychiatry</span><span class="en ">Oblak et al.</span><span class="cs"><span class="en ">Rumination</span></span><span class="tg">پژوهش پدیدارشناختی</span></button>
+    <button class="card study pick" data-pick="تشدید چرخه: هیجان شدید و فکر تکراری می‌توانند یکدیگر را تشدید کنند (نمونه کوچک؛ افراد دارای NSSI)." data-f="3"><span class="yr">۲۰۲۴</span><span class="en g">Frontiers in Psychology</span><span class="en ">Khan, Rehna &amp; Butt</span><span class="cs"><span class="en ">Rumination</span><span class="en ">Emotional Turbulence</span></span><span class="tg">در افراد دارای NSSI</span></button>
   </div>
-  <p class="foot low">هر مقاله یک بخش از تجربه را روشن می‌کند؛ نه کل پدیده را.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب بداند این وبینار یک خلاصه‌خوانی نیست؛ سه پژوهش سه زاویه از یک تجربه را روشن می‌کنند.</p><h4>متن پیشنهادی ارائه</h4><p>«برای امروز سه پژوهش کیفی جدید را کنار هم گذاشته‌ام. اولی درباره منتقد درونی و سرزنش خود است، دومی درباره تجربه کسانی که نشخوار فکری دارند، و سومی درباره شدت گرفتن هیجان و فکر تکراری در افرادی که خودآسیبی بدون قصد خودکشی را تجربه کرده‌اند. هر کدام فقط یک بخش از تجربه را روشن می‌کند؛ نه کل پدیده را.»</p><h4>نکته علمی</h4><p>Šoková و همکاران (۲۰۲۵، BMC Psychology): منتقد درونی و سرزنش خود. Oblak و همکاران (۲۰۲۶، Frontiers in Psychiatry): پدیدارشناسی نشخوار فکری. Khan و Rehna و Butt (۲۰۲۴، Frontiers in Psychology): نشخوار و آشفتگی هیجانی در افراد دارای NSSI، یعنی خودآسیبی بدون قصد خودکشی. هشدار روش‌شناختی: هر سه پژوهش کیفی هستند و برای فهم عمیق تجربه مناسب‌اند، نه برآورد شیوع یا اثبات رابطه علّی. مقاله سوم روی جمعیت خاصی انجام شده و تعمیم مستقیم ندارد.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید با اولین قطعه شروع کنیم: صدایی که در ذهن ما علیه خودمان حرف می‌زند.»</p></template></section>
+  <p class="detail" id="d5" data-f="3">روی هر کارت بزنید.</p>
+  <p class="foot low" data-f="3" style="--d:0.4s">هر مقاله یک بخش از تجربه را روشن می‌کند؛ نه کل پدیده را.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب بداند این وبینار یک خلاصه‌خوانی نیست؛ سه پژوهش سه زاویه از یک تجربه را روشن می‌کنند.</p><h4>متن پیشنهادی ارائه</h4><p>«برای امروز سه پژوهش کیفی جدید را کنار هم گذاشته‌ام. اولی درباره منتقد درونی و سرزنش خود است، دومی درباره تجربه کسانی که نشخوار فکری دارند، و سومی درباره شدت گرفتن هیجان و فکر تکراری در افرادی که خودآسیبی بدون قصد خودکشی را تجربه کرده‌اند. هر کدام فقط یک بخش از تجربه را روشن می‌کند؛ نه کل پدیده را.»</p><h4>نکته علمی</h4><p>Šoková و همکاران (۲۰۲۵، BMC Psychology): منتقد درونی و سرزنش خود. Oblak و همکاران (۲۰۲۶، Frontiers in Psychiatry): پدیدارشناسی نشخوار فکری. Khan و Rehna و Butt (۲۰۲۴، Frontiers in Psychology): نشخوار و آشفتگی هیجانی در افراد دارای NSSI، یعنی خودآسیبی بدون قصد خودکشی. هشدار روش‌شناختی: هر سه پژوهش کیفی هستند و برای فهم عمیق تجربه مناسب‌اند، نه برآورد شیوع یا اثبات رابطه علّی. مقاله سوم روی جمعیت خاصی انجام شده و تعمیم مستقیم ندارد.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید با اولین قطعه شروع کنیم: صدایی که در ذهن ما علیه خودمان حرف می‌زند.»</p></template></section>
 <section class="slide " id="s6" aria-label="منتقد درونی" data-n="6">
   <h1 class="t">منتقد درونی فقط یک صدا نیست</h1>
-  <div class="cards c3 g2"><div class="card crit"><div class="en lbl">Worrier</div><p>«مواظب باش؛ دوباره خراب می‌شود.»</p></div><div class="card crit"><div class="en lbl">Not good enough</div><p>«به اندازه کافی خوب نیستی.»</p></div><div class="card crit"><div class="en lbl">Hated self</div><p>«خودت مشکل هستی.»</p></div><div class="card crit"><div class="en lbl">Teamster</div><p>«باید بیشتر تلاش کنی.»</p></div><div class="card crit"><div class="en lbl">Non-feeler</div><p>«احساس نکن؛ کنترلش کن.»</p></div><div class="card crit"><div class="en lbl">Not good enough for others</div><p>«باید از نگاه دیگران بهتر باشی.»</p></div></div>
+  <div class="cards c3 g2 stg multi" data-key="s6"><button class="card crit pick" data-m="1"><span class="en lbl">Worrier</span><span class="q">«مواظب باش؛ دوباره خراب می‌شود.»</span></button><button class="card crit pick" data-m="1"><span class="en lbl">Not good enough</span><span class="q">«به اندازه کافی خوب نیستی.»</span></button><button class="card crit pick" data-m="1"><span class="en lbl">Hated self</span><span class="q">«خودت مشکل هستی.»</span></button><button class="card crit pick" data-m="1"><span class="en lbl">Teamster</span><span class="q">«باید بیشتر تلاش کنی.»</span></button><button class="card crit pick" data-m="1"><span class="en lbl">Non-feeler</span><span class="q">«احساس نکن؛ کنترلش کن.»</span></button><button class="card crit pick" data-m="1"><span class="en lbl">Not good enough for others</span><span class="q">«باید از نگاه دیگران بهتر باشی.»</span></button></div>
+  <p class="tally" id="t6" hidden></p>
   <div class="cite" dir="ltr">Šoková et al., 2025</div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب بفهمد منتقد درونی یک صدای واحد نیست و می‌تواند شکل‌های مختلفی داشته باشد.</p><h4>متن پیشنهادی ارائه</h4><p>«وقتی می‌گوییم منتقد درونی، معمولاً یک صدا را تصور می‌کنیم؛ اما در عمل چند چهره دارد. گاهی نگران است: مواظب باش دوباره خراب می‌شود. گاهی می‌گوید به اندازه کافی خوب نیستی. گاهی تندتر است و می‌گوید خودت مشکل هستی. گاهی فشار می‌آورد که بیشتر تلاش کن؛ گاهی می‌گوید احساس نکن، کنترلش کن؛ و گاهی مقایسه با دیگران است. اگر یکی از این صداها برایتان آشناست، تنها نیستید.»</p><h4>نکته علمی</h4><p>نام این شش الگو از Šoková و همکاران (۲۰۲۵) آمده است؛ جمله‌های داخل کارت‌ها «ترجمه و ساده‌سازی آموزشی» هستند، نه نقل مستقیم شرکت‌کنندگان.</p><p>درباره سوپرایگوی تنبیه‌گر (اگر مطرح شد): «در روان‌کاوی کلاسیک می‌توان این تجربه را از منظر سوپرایگوی تنبیه‌گر دید؛ در ادبیات پژوهشی معاصر، مفاهیمی مانند inner critic، self-criticism، self-attack و rumination ابزارهای نزدیک‌تری برای مطالعه تجربی این فرایند هستند.» نباید گفته شود این سه مقاله سوپرایگوی تنبیه‌گر را مطالعه یا اثبات کرده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«حالا از شما می‌خواهم یکی از این صداها را انتخاب کنید.»</p></template></section>
 <section class="slide " id="s7" aria-label="کدام صدا" data-n="7">
   <h1 class="t">کدام صدای درونی برای شما آشناتر است؟</h1>
-  <div class="voices"><div class="vo"><span class="ring">۱</span><p>«باید بهتر عمل می‌کردی.»</p></div><div class="vo"><span class="ring">۲</span><p>«حواست باشد، دوباره خراب می‌شود.»</p></div><div class="vo"><span class="ring">۳</span><p>«تو کافی نیستی.»</p></div><div class="vo"><span class="ring">۴</span><p>«دیگران درباره‌ات چه فکر می‌کنند؟»</p></div><div class="vo"><span class="ring">۵</span><p>«اصلاً احساساتی نشو.»</p></div><div class="vo"><span class="ring">۶</span><p>«مشکل خودت هستی.»</p></div></div>
-  <p class="cta-line">در چت فقط یکی را انتخاب کنید.</p><template class="notes"><h4>هدف اسلاید</h4><p>مشارکت مخاطب و شخصی شدن موضوع؛ هر کس صدای آشنای خودش را پیدا کند.</p><h4>متن پیشنهادی ارائه</h4><p>«شش جمله روی اسلاید است. نیازی نیست توضیح بدهید؛ فقط در چت شماره یکی را بنویسید؛ همانی که بیشتر از بقیه برایتان آشناست. (چند ثانیه صبر کنید.) ببینید چقدر از ما یک صدای مشترک داریم. هیچ جوابی بهتر یا بدتر نیست.»</p><h4>نکته علمی</h4><p>این اسلاید تعاملی است و داده پژوهشی تولید نمی‌کند؛ جمله‌ها برگرفته از الگوهای اسلاید قبل و در قالب آموزشی نوشته شده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«اکنون ببینیم وقتی این صدا فعال می‌شود، دقیقاً چه اتفاقی می‌افتد.»</p></template></section>
+  <div class="voices stg single" data-key="s7" data-result="r7"><button class="vo pick" data-t="Teamster"><span class="ring">۱</span><span class="vq">«باید بهتر عمل می‌کردی.»</span></button><button class="vo pick" data-t="Worrier"><span class="ring">۲</span><span class="vq">«حواست باشد، دوباره خراب می‌شود.»</span></button><button class="vo pick" data-t="Not good enough"><span class="ring">۳</span><span class="vq">«تو کافی نیستی.»</span></button><button class="vo pick" data-t="Not good enough for others"><span class="ring">۴</span><span class="vq">«دیگران درباره‌ات چه فکر می‌کنند؟»</span></button><button class="vo pick" data-t="Non-feeler"><span class="ring">۵</span><span class="vq">«اصلاً احساساتی نشو.»</span></button><button class="vo pick" data-t="Hated self"><span class="ring">۶</span><span class="vq">«مشکل خودت هستی.»</span></button></div>
+  <p class="cta-line">در چت فقط یکی را انتخاب کنید.</p>
+  <p class="result" id="r7" hidden></p><template class="notes"><h4>هدف اسلاید</h4><p>مشارکت مخاطب و شخصی شدن موضوع؛ هر کس صدای آشنای خودش را پیدا کند.</p><h4>متن پیشنهادی ارائه</h4><p>«شش جمله روی اسلاید است. نیازی نیست توضیح بدهید؛ فقط در چت شماره یکی را بنویسید؛ همانی که بیشتر از بقیه برایتان آشناست. (چند ثانیه صبر کنید.) ببینید چقدر از ما یک صدای مشترک داریم. هیچ جوابی بهتر یا بدتر نیست.»</p><h4>نکته علمی</h4><p>این اسلاید تعاملی است و داده پژوهشی تولید نمی‌کند؛ جمله‌ها برگرفته از الگوهای اسلاید قبل و در قالب آموزشی نوشته شده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«اکنون ببینیم وقتی این صدا فعال می‌شود، دقیقاً چه اتفاقی می‌افتد.»</p></template></section>
 <section class="slide " id="s8" aria-label="چهار مرحله" data-n="8">
   <h1 class="t">وقتی منتقد درونی فعال می‌شود چه اتفاقی می‌افتد؟</h1>
-  <div class="steps s4"><div class="st"><div class="n">۱</div><h3>موقعیت محرک</h3><div class="en c">Trigger</div></div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st"><div class="n">۲</div><h3>احساس / آگاهی هیجانی</h3><div class="en c">Emotion / Awareness</div></div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st"><div class="n">۳</div><h3>صدای منتقد</h3><div class="en c">Self-Criticism</div></div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st last"><div class="n">۴</div><h3>پاسخ متفاوت به خود</h3><div class="en c">Self-Compassion / Protection</div></div></div>
-  <p class="lead">هدف: حذف احساس نیست؛ تغییر پاسخ به منتقد است.</p>
+  <div class="steps s4"><div class="st" data-f="1"><div class="n">۱</div><h3>موقعیت محرک</h3><span class="en c">Trigger</span></div><svg class="ar mid" data-f="2" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st" data-f="2"><div class="n">۲</div><h3>احساس / آگاهی هیجانی</h3><span class="en c">Emotion / Awareness</span></div><svg class="ar mid" data-f="3" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st" data-f="3"><div class="n">۳</div><h3>صدای منتقد</h3><span class="en c">Self-Criticism</span></div><svg class="ar mid" data-f="4" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st last" data-f="4"><div class="n">۴</div><h3>پاسخ متفاوت به خود</h3><span class="en c">Self-Compassion / Protection</span></div></div>
+  <p class="lead" data-f="5">هدف: حذف احساس نیست؛ تغییر پاسخ به منتقد است.</p>
   <div class="cite" dir="ltr">Šoková et al., 2025</div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب چهار مرحله را ببیند و بفهمد هدف، خاموش کردن منتقد یا حذف احساس نیست؛ تغییر پاسخ به منتقد است.</p><h4>متن پیشنهادی ارائه</h4><p>«چهار مرحله را در نظر بگیرید: اول یک موقعیت محرک، بعد احساسی که آگاهانه یا ناآگاهانه ایجاد می‌شود، بعد صدای منتقد، و در آخر پاسخی که می‌دهیم. بیشتر وقت‌ها از مرحله سوم شروع می‌کنیم، یعنی منتقد را می‌شنویم و بی‌چون‌وچرا باور می‌کنیم. هدف این نیست که احساس را حذف کنیم؛ هدف این است که پاسخ دیگری به منتقد داشته باشیم؛ پاسخی که از خودمان محافظت کند.»</p><h4>نکته علمی</h4><p>ترتیب چهارمرحله‌ای بر پایه Šoková و همکاران (۲۰۲۵) و درباره غلبه بر منتقد درونی است؛ عبارت‌بندی ساده‌شده آن «ترجمه آموزشی» است. پیش از ارائه، نام مراحل را با متن مقاله تطبیق دهید.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید همین را روی تجربه خودتان امتحان کنیم؛ یک تمرین کوتاه.»</p></template></section>
 <section class="slide " id="s9" aria-label="تمرین ۱" data-n="9">
   <div class="tags"><span class="pill fill">تمرین</span><span class="pill">۸ دقیقه</span></div>
+  <div class="timer" id="timer"><span class="time" id="tm" data-sec="480">۰۸:۰۰</span><button class="chip" data-act="timer">شروع</button><button class="chip ghost" data-act="timer-reset">از نو</button></div>
   <h1 class="t">تمرین ۱ | آخرین باری که خودتان را سرزنش کردید</h1>
-  <ol class="rows"><li><span class="num fill">۱</span><div><h3>چه اتفاقی افتاد؟</h3><p>فقط واقعیت.</p></div></li><li><span class="num fill">۲</span><div><h3>اولین احساس شما چه بود؟</h3></div></li><li><span class="num fill">۳</span><div><h3>منتقد درونی دقیقاً چه گفت؟</h3></div></li><li><span class="num fill">۴</span><div><h3>این صدا بیشتر شبیه کدام الگو بود؟</h3></div></li><li><span class="num fill">۵</span><div><h3>اگر قرار نبود خودتان را تنبیه کنید، چه نیازی داشتید؟</h3></div></li></ol><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب یک تجربه واقعی سرزنش خود را قدم‌به‌قدم ببیند، نه اینکه فقط درباره‌اش بشنود.</p><h4>متن پیشنهادی ارائه</h4><p>«هشت دقیقه وقت داریم. به آخرین باری فکر کنید که خودتان را سرزنش کردید؛ مهم نیست بزرگ باشد یا کوچک. اول فقط واقعیت: چه اتفاقی افتاد؟ بعد اولین احساس. بعد جمله دقیق منتقد درونی؛ همان‌طور که شنیدید. بعد ببینید به کدام الگوی اسلاید ۶ نزدیک‌تر بود. آخر: اگر قرار نبود خودتان را تنبیه کنید، چه نیازی داشتید؟ لازم نیست چیزی را با دیگران به اشتراک بگذارید.»</p><h4>نکته علمی</h4><p>این تمرین خودمشاهده‌گری آموزشی است و ابزار ارزیابی یا درمان نیست. ساختار پنج‌مرحله‌ای، ترکیب آموزشی وبینار است. به مخاطب بگویید اگر یادآوری آن تجربه ناراحت‌کننده شد، می‌تواند تمرین را متوقف کند یا تجربه‌ای کم‌شدت‌تر انتخاب کند.</p><h4>انتقال به اسلاید بعد</h4><p>«بعد از تمام شدن اتفاق، ذهن معمولاً ساکت نمی‌شود؛ ادامه می‌دهد.»</p></template></section>
+  <ol class="rows"><li data-f="1"><span class="num fill">۱</span><div><h3>چه اتفاقی افتاد؟</h3><p>فقط واقعیت.</p></div></li><li data-f="2"><span class="num fill">۲</span><div><h3>اولین احساس شما چه بود؟</h3></div></li><li data-f="3"><span class="num fill">۳</span><div><h3>منتقد درونی دقیقاً چه گفت؟</h3></div></li><li data-f="4"><span class="num fill">۴</span><div><h3>این صدا بیشتر شبیه کدام الگو بود؟</h3></div></li><li data-f="5"><span class="num fill">۵</span><div><h3>اگر قرار نبود خودتان را تنبیه کنید، چه نیازی داشتید؟</h3></div></li></ol><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب یک تجربه واقعی سرزنش خود را قدم‌به‌قدم ببیند، نه اینکه فقط درباره‌اش بشنود.</p><h4>متن پیشنهادی ارائه</h4><p>«هشت دقیقه وقت داریم. به آخرین باری فکر کنید که خودتان را سرزنش کردید؛ مهم نیست بزرگ باشد یا کوچک. اول فقط واقعیت: چه اتفاقی افتاد؟ بعد اولین احساس. بعد جمله دقیق منتقد درونی؛ همان‌طور که شنیدید. بعد ببینید به کدام الگوی اسلاید ۶ نزدیک‌تر بود. آخر: اگر قرار نبود خودتان را تنبیه کنید، چه نیازی داشتید؟ لازم نیست چیزی را با دیگران به اشتراک بگذارید.»</p><h4>نکته علمی</h4><p>این تمرین خودمشاهده‌گری آموزشی است و ابزار ارزیابی یا درمان نیست. ساختار پنج‌مرحله‌ای، ترکیب آموزشی وبینار است. به مخاطب بگویید اگر یادآوری آن تجربه ناراحت‌کننده شد، می‌تواند تمرین را متوقف کند یا تجربه‌ای کم‌شدت‌تر انتخاب کند.</p><h4>انتقال به اسلاید بعد</h4><p>«بعد از تمام شدن اتفاق، ذهن معمولاً ساکت نمی‌شود؛ ادامه می‌دهد.»</p></template></section>
 <section class="slide bare" id="s10" aria-label="انتقال" data-n="10">
   <h1 class="sr">اما چرا بعد از تمام شدن اتفاق، ذهن ادامه می‌دهد؟</h1>
   <p class="kicker">اما چرا بعد از تمام شدن اتفاق، ذهن ادامه می‌دهد؟</p>
-  <p class="quote">«من باید بفهمم چرا.»</p>
-  <p class="after">و گاهی این تلاش برای فهمیدن، تبدیل به نشخوار می‌شود.</p><template class="notes"><h4>هدف اسلاید</h4><p>انتقال از سرزنش خود به نشخوار فکری؛ مخاطب فکر «باید بفهمم چرا» را بشناسد.</p><h4>متن پیشنهادی ارائه</h4><p>«بعد از یک اتفاق ناراحت‌کننده، ذهن اغلب می‌گوید: من باید بفهمم چرا. این جمله‌ای نیست که نادرست باشد؛ فهمیدن مهم است. اما گاهی همین تلاش برای فهمیدن، بی‌آنکه متوجه شویم، تبدیل به نشخوار می‌شود: فکر کردن تکراری که ظاهراً برای حل مسئله شروع می‌شود، اما ما را در همان نقطه نگه می‌دارد.»</p><h4>نکته علمی</h4><p>تعریف روزمره «نشخوار» در اینجا ترجمه ساده‌شده‌ای از مفهوم rumination است؛ تعریف دقیق‌تر در مقاله‌های دوم و سوم آمده است.</p><h4>انتقال به اسلاید بعد</h4><p>«چرا ذهن این‌قدر به این تلاش اعتماد می‌کند؟»</p></template></section>
+  <p class="quote" data-f="1">«من باید بفهمم چرا.»</p>
+  <p class="after" data-f="2">و گاهی این تلاش برای فهمیدن، تبدیل به نشخوار می‌شود.</p><template class="notes"><h4>هدف اسلاید</h4><p>انتقال از سرزنش خود به نشخوار فکری؛ مخاطب فکر «باید بفهمم چرا» را بشناسد.</p><h4>متن پیشنهادی ارائه</h4><p>«بعد از یک اتفاق ناراحت‌کننده، ذهن اغلب می‌گوید: من باید بفهمم چرا. این جمله‌ای نیست که نادرست باشد؛ فهمیدن مهم است. اما گاهی همین تلاش برای فهمیدن، بی‌آنکه متوجه شویم، تبدیل به نشخوار می‌شود: فکر کردن تکراری که ظاهراً برای حل مسئله شروع می‌شود، اما ما را در همان نقطه نگه می‌دارد.»</p><h4>نکته علمی</h4><p>تعریف روزمره «نشخوار» در اینجا ترجمه ساده‌شده‌ای از مفهوم rumination است؛ تعریف دقیق‌تر در مقاله‌های دوم و سوم آمده است.</p><h4>انتقال به اسلاید بعد</h4><p>«چرا ذهن این‌قدر به این تلاش اعتماد می‌کند؟»</p></template></section>
 <section class="slide " id="s11" aria-label="چرا نشخوار" data-n="11">
   <h1 class="t">نشخوار فکری چرا این‌قدر قانع‌کننده است؟</h1>
-  <div class="steps s3"><div class="st"><div class="n brown">۱</div><h3>ابهام</h3><div class="bd"><p>«من هنوز نمی‌فهمم چه اتفاقی افتاد.»</p></div></div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st"><div class="n brown">۲</div><h3>تلاش برای معنا</h3><div class="bd"><p>«اگر بیشتر فکر کنم، شاید بفهمم.»</p></div></div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st"><div class="n brown">۳</div><h3>گیر افتادن</h3><div class="bd"><p>فکر تکراری</p><p>فاصله از تجربه</p><p>احساس گیرکردن</p></div></div></div>
+  <div class="steps s3"><div class="st" data-f="1"><div class="n brown">۱</div><h3>ابهام</h3><div class="bd"><p>«من هنوز نمی‌فهمم چه اتفاقی افتاد.»</p></div></div><svg class="ar mid" data-f="2" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st" data-f="2"><div class="n brown">۲</div><h3>تلاش برای معنا</h3><div class="bd"><p>«اگر بیشتر فکر کنم، شاید بفهمم.»</p></div></div><svg class="ar mid" data-f="3" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="st" data-f="3"><div class="n brown">۳</div><h3>گیر افتادن</h3><div class="bd"><p>فکر تکراری</p><p>فاصله از تجربه</p><p>احساس گیرکردن</p></div></div></div>
   <div class="cite" dir="ltr">Oblak et al., 2026</div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب بفهمد نشخوار چرا قانع‌کننده به نظر می‌رسد؛ از دل یک نیاز واقعی برای معنا می‌آید.</p><h4>متن پیشنهادی ارائه</h4><p>«نشخوار از یک ابهام شروع می‌شود: من هنوز نمی‌فهمم چه اتفاقی افتاد. بعد ذهن برای ساختن معنا تلاش می‌کند: اگر بیشتر فکر کنم، شاید بفهمم. و گاهی به‌جای فهمیدن، گیر می‌افتیم؛ فکر تکراری، فاصله گرفتن از خود تجربه و احساس گیرکردن. یعنی نشخوار نشانه ضعف نیست؛ تلاشی است که جایی کارایی‌اش را از دست می‌دهد.»</p><h4>نکته علمی</h4><p>Oblak و همکاران (۲۰۲۶) نشخوار را به‌عنوان تلاشی برای حل عدم‌قطعیت و ساختن معنا توصیف کرده‌اند (پژوهش پدیدارشناختی). ترتیب سه‌مرحله‌ای روی اسلاید، «ترجمه آموزشی» آن توصیف است، نه مدل منتشرشده مقاله.</p><h4>انتقال به اسلاید بعد</h4><p>«پس چطور بفهمیم کجا فکر کردن مفید است و کجا نشخوار شده؟»</p></template></section>
 <section class="slide " id="s12" aria-label="فکر یا نشخوار" data-n="12">
   <h1 class="t">فکر کردن یا نشخوار؟</h1>
   <div class="two cmp">
-    <div class="cl green"><h2>فکر کردن برای فهمیدن</h2><ul><li>سؤال مشخص</li><li>اطلاعات تازه</li><li>تصمیم</li><li>امکان اقدام</li></ul></div>
-    <span class="vr"></span>
-    <div class="cl brown"><h2>نشخوار</h2><ul><li>تکرار همان سؤال</li><li>بازپخش گذشته</li><li>برچسب‌زدن به خود</li><li>احساس گیر افتادن</li></ul></div>
+    <div class="cl green"><h2 data-f="1">فکر کردن برای فهمیدن</h2><ul><li data-f="1" style="--d:0.2s">سؤال مشخص</li><li data-f="1" style="--d:0.4s">اطلاعات تازه</li><li data-f="1" style="--d:0.6000000000000001s">تصمیم</li><li data-f="1" style="--d:0.8s">امکان اقدام</li></ul></div>
+    <span class="vr" data-f="2"></span>
+    <div class="cl brown"><h2 data-f="2">نشخوار</h2><ul><li data-f="2" style="--d:0.2s">تکرار همان سؤال</li><li data-f="2" style="--d:0.4s">بازپخش گذشته</li><li data-f="2" style="--d:0.6000000000000001s">برچسب‌زدن به خود</li><li data-f="2" style="--d:0.8s">احساس گیر افتادن</li></ul></div>
   </div>
-  <p class="foot low">این تمایز یک synthesis آموزشی از یافته‌های پژوهش است.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب دو نوع فکر کردن را از هم تمیز دهد، بدون اینکه فکر کردن را «بد» بداند.</p><h4>متن پیشنهادی ارائه</h4><p>«فکر کردن برای فهمیدن معمولاً یک سؤال مشخص دارد، اطلاعات تازه می‌آورد، به تصمیم می‌رسد و راه اقدام را باز می‌کند. نشخوار همان سؤال را بارها تکرار می‌کند، گذشته را دوباره پخش می‌کند، به خودمان برچسب می‌زند و حس گیر افتادن می‌دهد. این دو همیشه مرز تیز ندارند؛ اما این سؤال کمک می‌کند: این فکر دارد ما را جلو می‌برد یا در جا نگه می‌دارد؟»</p><h4>نکته علمی</h4><p>این تمایز یک synthesis آموزشی از یافته‌های پژوهش است؛ جدول دو ستونی را نباید به‌عنوان معیار تشخیصی ارائه کرد.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید همین را روی یک فکر تکراری خودتان امتحان کنیم.»</p></template></section>
+  <p class="foot low" data-f="3">این تمایز یک synthesis آموزشی از یافته‌های پژوهش است.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب دو نوع فکر کردن را از هم تمیز دهد، بدون اینکه فکر کردن را «بد» بداند.</p><h4>متن پیشنهادی ارائه</h4><p>«فکر کردن برای فهمیدن معمولاً یک سؤال مشخص دارد، اطلاعات تازه می‌آورد، به تصمیم می‌رسد و راه اقدام را باز می‌کند. نشخوار همان سؤال را بارها تکرار می‌کند، گذشته را دوباره پخش می‌کند، به خودمان برچسب می‌زند و حس گیر افتادن می‌دهد. این دو همیشه مرز تیز ندارند؛ اما این سؤال کمک می‌کند: این فکر دارد ما را جلو می‌برد یا در جا نگه می‌دارد؟»</p><h4>نکته علمی</h4><p>این تمایز یک synthesis آموزشی از یافته‌های پژوهش است؛ جدول دو ستونی را نباید به‌عنوان معیار تشخیصی ارائه کرد.</p><h4>انتقال به اسلاید بعد</h4><p>«بیایید همین را روی یک فکر تکراری خودتان امتحان کنیم.»</p></template></section>
 <section class="slide " id="s13" aria-label="تمرین ۲" data-n="13">
   <div class="tags"><span class="pill fill">تمرین</span></div>
   <h1 class="t">تمرین ۲ | این فکر واقعاً به کجا می‌رود؟</h1>
   <p class="ask">یک فکر تکراری اخیر را بنویسید.</p>
-  <ol class="qs"><li><span class="ring">۱</span>آیا سؤال جدیدی تولید می‌کند؟</li><li><span class="ring">۲</span>آیا پاسخ تازه‌ای پیدا می‌کنید؟</li><li><span class="ring">۳</span>آیا در پایان به یک اقدام مشخص می‌رسید؟</li></ol>
-  <div class="callout">اگر نه، آیا ممکن است فکر کردن جای اقدام را گرفته باشد؟</div>
-  <p class="foot low">این تمرین خودمشاهده‌گری است، نه ابزار تشخیص.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب یک فکر تکراری واقعی را با سه سؤال بسنجد.</p><h4>متن پیشنهادی ارائه</h4><p>«یک فکر تکراری اخیر را بنویسید. سپس سه سؤال: آیا سؤال جدیدی تولید می‌کند؟ آیا پاسخ تازه‌ای پیدا می‌کنید؟ آیا در پایان به یک اقدام مشخص می‌رسید؟ اگر جواب هر سه «نه» است، فقط یک سؤال از خودتان بپرسید: آیا ممکن است فکر کردن جای اقدام را گرفته باشد؟ نیازی نیست الان جواب بدهید؛ فقط ببینید.»</p><h4>نکته علمی</h4><p>این تمرین خودمشاهده‌گری است، نه ابزار تشخیص. سه سؤال، ابزار آموزشی وبینار هستند و از مقاله‌ای به‌عنوان پرسشنامه اعتبارسنجی‌شده نقل نشده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«وقتی هیجان و نشخوار با هم جمع شوند، چه اتفاقی می‌افتد؟»</p></template></section>
+  <ol class="qs" data-key="s13"><li><span class="ring">۱</span><span class="qt">آیا سؤال جدیدی تولید می‌کند؟</span><span class="yn"><button class="chip" data-yn="1" data-q="0">بله</button><button class="chip" data-yn="0" data-q="0">نه</button></span></li><li><span class="ring">۲</span><span class="qt">آیا پاسخ تازه‌ای پیدا می‌کنید؟</span><span class="yn"><button class="chip" data-yn="1" data-q="1">بله</button><button class="chip" data-yn="0" data-q="1">نه</button></span></li><li><span class="ring">۳</span><span class="qt">آیا در پایان به یک اقدام مشخص می‌رسید؟</span><span class="yn"><button class="chip" data-yn="1" data-q="2">بله</button><button class="chip" data-yn="0" data-q="2">نه</button></span></li></ol>
+  <button class="callout dim" id="c13">اگر نه، آیا ممکن است فکر کردن جای اقدام را گرفته باشد؟</button>
+  <p class="foot low" >این تمرین خودمشاهده‌گری است، نه ابزار تشخیص.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب یک فکر تکراری واقعی را با سه سؤال بسنجد.</p><h4>متن پیشنهادی ارائه</h4><p>«یک فکر تکراری اخیر را بنویسید. سپس سه سؤال: آیا سؤال جدیدی تولید می‌کند؟ آیا پاسخ تازه‌ای پیدا می‌کنید؟ آیا در پایان به یک اقدام مشخص می‌رسید؟ اگر جواب هر سه «نه» است، فقط یک سؤال از خودتان بپرسید: آیا ممکن است فکر کردن جای اقدام را گرفته باشد؟ نیازی نیست الان جواب بدهید؛ فقط ببینید.»</p><h4>نکته علمی</h4><p>این تمرین خودمشاهده‌گری است، نه ابزار تشخیص. سه سؤال، ابزار آموزشی وبینار هستند و از مقاله‌ای به‌عنوان پرسشنامه اعتبارسنجی‌شده نقل نشده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«وقتی هیجان و نشخوار با هم جمع شوند، چه اتفاقی می‌افتد؟»</p></template></section>
 <section class="slide " id="s14" aria-label="تشدید چرخه" data-n="14">
   <h1 class="t">وقتی هیجان و نشخوار وارد یک چرخه می‌شوند</h1>
   <div class="loopwrap">
-    <div class="chain"><div class="bx">هیجان شدید</div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx">تحمل پایین پریشانی</div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx">فکرهای تکراری</div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx">هیجان شدیدتر</div><svg class="ar mid" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx last">فشار بیشتر</div></div>
-    <svg class="loop" viewBox="0 0 1661 100" aria-hidden="true"><path d="M144 0V72H1517V14"/><path d="M1507 24L1517 8 1527 24"/></svg>
+    <div class="chain"><div class="bx" data-f="1">هیجان شدید</div><svg class="ar mid" data-f="2" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx" data-f="2">تحمل پایین پریشانی</div><svg class="ar mid" data-f="3" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx" data-f="3">فکرهای تکراری</div><svg class="ar mid" data-f="4" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx" data-f="4">هیجان شدیدتر</div><svg class="ar mid" data-f="5" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><div class="bx last" data-f="5">فشار بیشتر</div></div>
+    <svg class="loop" data-f="6" viewBox="0 0 1661 100" aria-hidden="true"><path class="p1" d="M144 0V72H1517V14"/><path class="p2" d="M1507 24L1517 8 1527 24"/></svg>
   </div>
-  <p class="disc">یک مطالعه روی ۱۰ نفر دارای NSSI (خودآسیبی بدون قصد خودکشی)؛ برای توضیح «تشدید چرخه»، نه تعمیم به همه.</p>
+  <p class="disc" data-f="6" style="--d:0.9s">یک مطالعه روی ۱۰ نفر دارای NSSI (خودآسیبی بدون قصد خودکشی)؛ برای توضیح «تشدید چرخه»، نه تعمیم به همه.</p>
   <div class="cite" dir="ltr">Khan, Rehna &amp; Butt, 2024 | Original Research</div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب ببیند هیجان شدید و فکر تکراری می‌توانند یکدیگر را تشدید کنند؛ بدون تعمیم این یافته به همه.</p><h4>متن پیشنهادی ارائه</h4><p>«یکی از پژوهش‌ها چرخه‌ای را توصیف می‌کند: هیجان شدید می‌آید، تحمل پریشانی پایین است، فکرهای تکراری وارد می‌شوند، هیجان شدیدتر می‌شود و فشار بیشتر. من این را برای فهم «تشدید چرخه» نشان می‌دهم؛ نه برای اینکه بگویم همه این‌طور هستند.»</p><h4>نکته علمی</h4><p>Khan و Rehna و Butt (۲۰۲۴) این موضوع را با ۱۰ فرد دارای NSSI (خودآسیبی بدون قصد خودکشی) بررسی کرده‌اند. هشدار: نمونه کوچک، کیفی و بالینی است. ما فقط از آن برای توضیح الگوی «تشدید چرخه» استفاده می‌کنیم؛ تعمیم مستقیم به مخاطب عمومی یا ادعای علّی مجاز نیست. اگر مخاطبی نگران خودآسیبی بود، او را به متخصص ارجاع دهید.</p><h4>انتقال به اسلاید بعد</h4><p>«حالا تکه‌ها را کنار هم بگذاریم و کل نقشه را ببینیم.»</p></template></section>
 <section class="slide key" id="s15" aria-label="نقشه کامل" data-n="15">
   <h1 class="t">نقشه کامل چرخه</h1>
-  <div class="two">
-    <div class="lane brown tight"><h2>مسیر حمله به خود</h2><div class="nd">اتفاق</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">احساس</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">«مشکل منم»</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">خودسرزنشی</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">نشخوار</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">حمله به خود</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last">پریشانی</div></div>
-    <span class="vr"></span>
-    <div class="lane green tight"><h2>مسیر پردازش و اقدام</h2><div class="nd">اتفاق</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">احساس</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">نیاز</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">خودحمایتی</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">خشم قاطعانه / محافظتی</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd">مرز</div><svg class="ad " viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last">اقدام</div></div>
+  <div class="chips" data-f="2" style="--d:0.6s"><button class="chip on" data-focus="both">هر دو مسیر</button><button class="chip" data-focus="brown">مسیر حمله به خود</button><button class="chip" data-focus="green">مسیر پردازش و اقدام</button></div>
+  <div class="two" data-focus="both">
+    <div class="lane brown tight"><h2 data-f="1">مسیر حمله به خود</h2><div class="nd" data-f="1" style="--d:0.18s">اتفاق</div><svg class="ad " data-f="1" style="--d:0.27s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:0.36s">احساس</div><svg class="ad " data-f="1" style="--d:0.44999999999999996s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:0.54s">«مشکل منم»</div><svg class="ad " data-f="1" style="--d:0.63s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:0.72s">خودسرزنشی</div><svg class="ad " data-f="1" style="--d:0.8099999999999999s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:0.8999999999999999s">نشخوار</div><svg class="ad " data-f="1" style="--d:0.9899999999999999s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="1" style="--d:1.08s">حمله به خود</div><svg class="ad " data-f="1" style="--d:1.1700000000000002s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last" data-f="1" style="--d:1.26s">پریشانی</div></div>
+    <span class="vr" data-f="2"></span>
+    <div class="lane green tight"><h2 data-f="2">مسیر پردازش و اقدام</h2><div class="nd" data-f="2" style="--d:0.18s">اتفاق</div><svg class="ad " data-f="2" style="--d:0.27s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.36s">احساس</div><svg class="ad " data-f="2" style="--d:0.44999999999999996s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.54s">نیاز</div><svg class="ad " data-f="2" style="--d:0.63s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.72s">خودحمایتی</div><svg class="ad " data-f="2" style="--d:0.8099999999999999s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:0.8999999999999999s">خشم قاطعانه / محافظتی</div><svg class="ad " data-f="2" style="--d:0.9899999999999999s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd" data-f="2" style="--d:1.08s">مرز</div><svg class="ad " data-f="2" style="--d:1.1700000000000002s" viewBox="0 0 14 44" aria-hidden="true"><path d="M7 2V38M1.5 32L7 39.5 12.5 32"/></svg><div class="nd last" data-f="2" style="--d:1.26s">اقدام</div></div>
   </div>
-  <p class="foot low">این نقشه، ترکیب آموزشی سه پژوهش است؛ نه یک مدل واحد منتشرشده.</p><template class="notes"><h4>هدف اسلاید</h4><p>مهم‌ترین اسلاید؛ مخاطب دو مسیر را کنار هم ببیند و نقطه انشعاب را تشخیص دهد.</p><h4>متن پیشنهادی ارائه</h4><p>«این اسلاید خلاصه امروز ماست. هر دو مسیر با یک اتفاق و یک احساس شروع می‌شوند. در مسیر راست، احساس به «مشکل منم» تبدیل می‌شود؛ سپس خودسرزنشی، نشخوار، حمله به خود و پریشانی. در مسیر چپ، احساس به نیاز وصل می‌شود؛ سپس خودحمایتی، خشم قاطعانه و محافظتی، مرز و اقدام. تفاوت از همان‌جا شروع می‌شود که بعد از احساس، به‌جای «مشکل منم» می‌پرسیم «به چه چیزی نیاز دارم؟». لطفاً چند ثانیه صبر کنید تا مخاطب هر دو مسیر را دنبال کند.»</p><h4>نکته علمی</h4><p>این نقشه، ترکیب آموزشی سه پژوهش است؛ نه یک مدل واحد منتشرشده. عناصر آن از سه مقاله آمده‌اند (منتقد درونی؛ نشخوار؛ آشفتگی هیجانی)، اما چیدمان و دو مسیر موازی را وبینار پیشنهاد می‌کند. هیچ‌یک از مقالات این نقشه را آزمون نکرده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«اگر مسیر راست آشناست، مسیر چپ چگونه ساخته می‌شود؟»</p></template></section>
+  <p class="foot low" data-f="2" style="--d:1.4s">این نقشه، ترکیب آموزشی سه پژوهش است؛ نه یک مدل واحد منتشرشده.</p><template class="notes"><h4>هدف اسلاید</h4><p>مهم‌ترین اسلاید؛ مخاطب دو مسیر را کنار هم ببیند و نقطه انشعاب را تشخیص دهد.</p><h4>متن پیشنهادی ارائه</h4><p>«این اسلاید خلاصه امروز ماست. هر دو مسیر با یک اتفاق و یک احساس شروع می‌شوند. در مسیر راست، احساس به «مشکل منم» تبدیل می‌شود؛ سپس خودسرزنشی، نشخوار، حمله به خود و پریشانی. در مسیر چپ، احساس به نیاز وصل می‌شود؛ سپس خودحمایتی، خشم قاطعانه و محافظتی، مرز و اقدام. تفاوت از همان‌جا شروع می‌شود که بعد از احساس، به‌جای «مشکل منم» می‌پرسیم «به چه چیزی نیاز دارم؟». لطفاً چند ثانیه صبر کنید تا مخاطب هر دو مسیر را دنبال کند.»</p><h4>نکته علمی</h4><p>این نقشه، ترکیب آموزشی سه پژوهش است؛ نه یک مدل واحد منتشرشده. عناصر آن از سه مقاله آمده‌اند (منتقد درونی؛ نشخوار؛ آشفتگی هیجانی)، اما چیدمان و دو مسیر موازی را وبینار پیشنهاد می‌کند. هیچ‌یک از مقالات این نقشه را آزمون نکرده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«اگر مسیر راست آشناست، مسیر چپ چگونه ساخته می‌شود؟»</p></template></section>
 <section class="slide " id="s16" aria-label="مسیر خروج" data-n="16">
   <h1 class="t">مسیر خروج از چرخه</h1>
-  <ol class="exit"><li class=""><span class="big">۱</span><div><h3>منتقد را ببین</h3><p>«الان چه صدایی فعال شده؟»</p></div></li><li class=""><span class="big">۲</span><div><h3>احساس را نام ببر</h3><p>«واقعاً چه احساسی دارم؟»</p></div></li><li class=""><span class="big">۳</span><div><h3>نیاز را پیدا کن</h3><p>«چه چیزی برایم مهم بوده؟»</p></div></li><li class=""><span class="big">۴</span><div><h3>از خودت محافظت کن</h3><p>«چطور علیه خودم رفتار نکنم؟»</p></div></li><li class="hl"><span class="big">۵</span><div><h3>به اقدام برس</h3><p>«چه مرز یا خواسته‌ای دارم؟»</p></div></li></ol><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب یک مسیر پنج‌مرحله‌ای ساده برای شروع تغییر داشته باشد.</p><h4>متن پیشنهادی ارائه</h4><p>«پنج قدم کوچک: منتقد را ببین؛ بپرس الان چه صدایی فعال شده. احساس را نام ببر. نیاز را پیدا کن؛ چه چیزی برایم مهم بوده؟ از خودت محافظت کن؛ یعنی علیه خودم رفتار نکنم. و به اقدام برس؛ چه مرز یا خواسته‌ای دارم؟ لازم نیست همه را کامل انجام دهید؛ حتی دو قدم اول هم تفاوت ایجاد می‌کند.»</p><h4>نکته علمی</h4><p>این مسیر «ترجمه آموزشی» ایده‌های سه پژوهش است (آگاهی از منتقد، نام‌گذاری احساس، خودحمایتی و رسیدن به اقدام) و نه پروتکل درمانی منتشرشده. وعده درمان یا نتیجه قطعی نباید داده شود.</p><h4>انتقال به اسلاید بعد</h4><p>«این پنج قدم را می‌توان در یک جمله جمع کرد.»</p></template></section>
+  <ol class="exit"><li class="" data-f="1"><span class="big">۱</span><div><h3>منتقد را ببین</h3><p>«الان چه صدایی فعال شده؟»</p></div></li><li class="" data-f="2"><span class="big">۲</span><div><h3>احساس را نام ببر</h3><p>«واقعاً چه احساسی دارم؟»</p></div></li><li class="" data-f="3"><span class="big">۳</span><div><h3>نیاز را پیدا کن</h3><p>«چه چیزی برایم مهم بوده؟»</p></div></li><li class="" data-f="4"><span class="big">۴</span><div><h3>از خودت محافظت کن</h3><p>«چطور علیه خودم رفتار نکنم؟»</p></div></li><li class="hl" data-f="5"><span class="big">۵</span><div><h3>به اقدام برس</h3><p>«چه مرز یا خواسته‌ای دارم؟»</p></div></li></ol><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب یک مسیر پنج‌مرحله‌ای ساده برای شروع تغییر داشته باشد.</p><h4>متن پیشنهادی ارائه</h4><p>«پنج قدم کوچک: منتقد را ببین؛ بپرس الان چه صدایی فعال شده. احساس را نام ببر. نیاز را پیدا کن؛ چه چیزی برایم مهم بوده؟ از خودت محافظت کن؛ یعنی علیه خودم رفتار نکنم. و به اقدام برس؛ چه مرز یا خواسته‌ای دارم؟ لازم نیست همه را کامل انجام دهید؛ حتی دو قدم اول هم تفاوت ایجاد می‌کند.»</p><h4>نکته علمی</h4><p>این مسیر «ترجمه آموزشی» ایده‌های سه پژوهش است (آگاهی از منتقد، نام‌گذاری احساس، خودحمایتی و رسیدن به اقدام) و نه پروتکل درمانی منتشرشده. وعده درمان یا نتیجه قطعی نباید داده شود.</p><h4>انتقال به اسلاید بعد</h4><p>«این پنج قدم را می‌توان در یک جمله جمع کرد.»</p></template></section>
 <section class="slide " id="s17" aria-label="فرمول" data-n="17">
   <h1 class="t">یک فرمول ساده برای بردن با خودتان</h1>
-  <div class="formula"><span class="">احساس</span><svg class="ar big" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span class="">نیاز</span><svg class="ar big" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span class="">مرز</span><svg class="ar big" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span class="deep">اقدام</span></div>
-  <p class="no">نه:</p>
-  <div class="anti"><span>احساس</span><svg class="ar soft" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>قضاوت خود</span><svg class="ar soft" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>نشخوار</span><svg class="ar soft" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span>حمله به خود</span></div><template class="notes"><h4>هدف اسلاید</h4><p>یک جمله ساده و قابل‌ذخیره: احساس، نیاز، مرز، اقدام.</p><h4>متن پیشنهادی ارائه</h4><p>«اگر فقط یک چیز از امروز یادتان بماند، همین باشد: احساس، نیاز، مرز، اقدام. و نه: احساس، قضاوت خود، نشخوار، حمله به خود. می‌توانید از این اسلاید اسکرین‌شات بگیرید.»</p><h4>نکته علمی</h4><p>جمع‌بندی آموزشی است؛ از یک مقاله خاص نقل نشده است و به‌عنوان «چارچوب آموزشی وبینار» معرفی می‌شود.</p><h4>انتقال به اسلاید بعد</h4><p>«حالا نوبت نقشه شخصی خودتان است.»</p></template></section>
+  <div class="formula"><span class="" data-f="1">احساس</span><svg class="ar big" data-f="2" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span class="" data-f="2">نیاز</span><svg class="ar big" data-f="3" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span class="" data-f="3">مرز</span><svg class="ar big" data-f="4" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span class="deep" data-f="4">اقدام</span></div>
+  <p class="no" data-f="5">نه:</p>
+  <div class="anti"><span data-f="5" style="--d:0.2s">احساس</span><svg class="ar soft" data-f="5" style="--d:0.3s" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span data-f="5" style="--d:0.45s">قضاوت خود</span><svg class="ar soft" data-f="5" style="--d:0.55s" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span data-f="5" style="--d:0.7s">نشخوار</span><svg class="ar soft" data-f="5" style="--d:0.8s" viewBox="0 0 64 14" aria-hidden="true"><path d="M62 7H5M11 1.5L4.5 7 11 12.5"/></svg><span data-f="5" style="--d:0.95s">حمله به خود</span></div><template class="notes"><h4>هدف اسلاید</h4><p>یک جمله ساده و قابل‌ذخیره: احساس، نیاز، مرز، اقدام.</p><h4>متن پیشنهادی ارائه</h4><p>«اگر فقط یک چیز از امروز یادتان بماند، همین باشد: احساس، نیاز، مرز، اقدام. و نه: احساس، قضاوت خود، نشخوار، حمله به خود. می‌توانید از این اسلاید اسکرین‌شات بگیرید.»</p><h4>نکته علمی</h4><p>جمع‌بندی آموزشی است؛ از یک مقاله خاص نقل نشده است و به‌عنوان «چارچوب آموزشی وبینار» معرفی می‌شود.</p><h4>انتقال به اسلاید بعد</h4><p>«حالا نوبت نقشه شخصی خودتان است.»</p></template></section>
 <section class="slide " id="s18" aria-label="تمرین نهایی" data-n="18">
   <div class="tags"><span class="pill fill">تمرین</span></div>
+  <div class="tools"><button class="chip" data-act="print">چاپ نقشه من</button><button class="chip ghost" data-act="clear">پاک کردن</button></div>
   <h1 class="t">تمرین نهایی | نقشه چرخه شخصی من</h1>
-  <div class="cards c3 g2 ws"><div class="card"><h3>اتفاق</h3><p>چه شد؟</p></div><div class="card"><h3>احساس</h3><p>چه احساسی داشتم؟</p></div><div class="card"><h3>منتقد</h3><p>دقیقاً چه گفت؟</p></div><div class="card"><h3>نیاز</h3><p>چه چیزی برایم مهم بود؟</p></div><div class="card"><h3>محافظت</h3><p>چطور بدون حمله به خودم از خودم حمایت کنم؟</p></div><div class="card"><h3>اقدام</h3><p>قدم بعدی من چیست؟</p></div></div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب نقشه شخصی چرخه خودش را روی کاغذ بیاورد.</p><h4>متن پیشنهادی ارائه</h4><p>«شش کارت: اتفاق، احساس، منتقد، نیاز، محافظت و اقدام. می‌توانید فرم یک‌صفحه‌ای را چاپ کنید یا فقط یادداشت کنید. با یک تجربه کوچک و واقعی شروع کنید؛ بزرگ‌ترین زخم زندگی‌تان لازم نیست.»</p><h4>نکته علمی</h4><p>فرم آموزشی است و ابزار تشخیص نیست. ساختار آن بر پایه نقشه اسلاید ۱۵ است و مستقیم از یک مقاله نیامده است.</p><h4>انتقال به اسلاید بعد</h4><p>«بعد از این تمرین، ببینید کجای چرخه بیشتر گیر می‌کنید.»</p></template></section>
+  <div class="cards c3 ws stg"><div class="card"><h3>اتفاق</h3><p>چه شد؟</p><textarea data-k="s18-0" aria-label="اتفاق" rows="2" spellcheck="false"></textarea></div><div class="card"><h3>احساس</h3><p>چه احساسی داشتم؟</p><textarea data-k="s18-1" aria-label="احساس" rows="2" spellcheck="false"></textarea></div><div class="card"><h3>منتقد</h3><p>دقیقاً چه گفت؟</p><textarea data-k="s18-2" aria-label="منتقد" rows="2" spellcheck="false"></textarea></div><div class="card"><h3>نیاز</h3><p>چه چیزی برایم مهم بود؟</p><textarea data-k="s18-3" aria-label="نیاز" rows="2" spellcheck="false"></textarea></div><div class="card"><h3>محافظت</h3><p>چطور بدون حمله به خودم از خودم حمایت کنم؟</p><textarea data-k="s18-4" aria-label="محافظت" rows="2" spellcheck="false"></textarea></div><div class="card"><h3>اقدام</h3><p>قدم بعدی من چیست؟</p><textarea data-k="s18-5" aria-label="اقدام" rows="2" spellcheck="false"></textarea></div></div><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب نقشه شخصی چرخه خودش را روی کاغذ بیاورد.</p><h4>متن پیشنهادی ارائه</h4><p>«شش کارت: اتفاق، احساس، منتقد، نیاز، محافظت و اقدام. می‌توانید فرم یک‌صفحه‌ای را چاپ کنید یا فقط یادداشت کنید. با یک تجربه کوچک و واقعی شروع کنید؛ بزرگ‌ترین زخم زندگی‌تان لازم نیست.»</p><h4>نکته علمی</h4><p>فرم آموزشی است و ابزار تشخیص نیست. ساختار آن بر پایه نقشه اسلاید ۱۵ است و مستقیم از یک مقاله نیامده است.</p><h4>انتقال به اسلاید بعد</h4><p>«بعد از این تمرین، ببینید کجای چرخه بیشتر گیر می‌کنید.»</p></template></section>
 <section class="slide " id="s19" aria-label="کجا گیر کرده‌اید" data-n="19">
   <h1 class="t">کجا در این چرخه گیر کرده‌اید؟</h1>
-  <div class="cards c5"><div class="card loc"><div class="n">۱</div><h3>احساس</h3><p>نمی‌فهمم واقعاً چه احساسی دارم.</p></div><div class="card loc"><div class="n">۲</div><h3>خودسرزنشی</h3><p>احساس را می‌فهمم، اما خودم را مقصر می‌کنم.</p></div><div class="card loc"><div class="n">۳</div><h3>نشخوار</h3><p>می‌فهمم ناراحتم، اما نمی‌توانم از فکر کردن بیرون بیایم.</p></div><div class="card loc"><div class="n">۴</div><h3>اقدام</h3><p>می‌دانم چه می‌خواهم، اما نمی‌توانم از خودم دفاع کنم.</p></div><div class="card loc hl"><div class="n">۵</div><h3>الگوی تکرارشونده</h3><p>این چرخه بارها در روابط، کار یا تصمیم‌ها تکرار می‌شود.</p></div></div>
-  <p class="foot low">این یک نقشه خودمشاهده‌گری است، نه خودتشخیصی.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب جای تقریبی خودش را در چرخه پیدا کند، بدون برچسب زدن به خود.</p><h4>متن پیشنهادی ارائه</h4><p>«پنج جمله روی اسلاید است. هرکدام را که بیشتر شبیه شماست علامت بزنید. شاید یکی، شاید بیشتر. اگر جمله آخر برایتان آشناست و این چرخه بارها در روابط، کار یا تصمیم‌هایتان تکرار می‌شود، بررسی تخصصی‌تر می‌تواند مفید باشد.»</p><h4>نکته علمی</h4><p>این یک نقشه خودمشاهده‌گری است، نه خودتشخیصی. پنج جمله، ابزار آموزشی هستند و از مقاله‌ای نقل نشده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«و اگر این الگو در شما تکرارشونده است...»</p></template></section>
+  <div class="cards c5 stg single" data-key="s19" data-sug="1"><button class="card loc pick" data-i="0"><span class="n">۱</span><span class="h">احساس</span><span class="d">نمی‌فهمم واقعاً چه احساسی دارم.</span></button><button class="card loc pick" data-i="1"><span class="n">۲</span><span class="h">خودسرزنشی</span><span class="d">احساس را می‌فهمم، اما خودم را مقصر می‌کنم.</span></button><button class="card loc pick" data-i="2"><span class="n">۳</span><span class="h">نشخوار</span><span class="d">می‌فهمم ناراحتم، اما نمی‌توانم از فکر کردن بیرون بیایم.</span></button><button class="card loc pick" data-i="3"><span class="n">۴</span><span class="h">اقدام</span><span class="d">می‌دانم چه می‌خواهم، اما نمی‌توانم از خودم دفاع کنم.</span></button><button class="card loc pick last" data-i="4"><span class="n">۵</span><span class="h">الگوی تکرارشونده</span><span class="d">این چرخه بارها در روابط، کار یا تصمیم‌ها تکرار می‌شود.</span></button></div>
+  <div class="sug" id="sug" hidden></div>
+  <p class="foot low bot" >این یک نقشه خودمشاهده‌گری است، نه خودتشخیصی.</p><template class="notes"><h4>هدف اسلاید</h4><p>مخاطب جای تقریبی خودش را در چرخه پیدا کند، بدون برچسب زدن به خود.</p><h4>متن پیشنهادی ارائه</h4><p>«پنج جمله روی اسلاید است. هرکدام را که بیشتر شبیه شماست علامت بزنید. شاید یکی، شاید بیشتر. اگر جمله آخر برایتان آشناست و این چرخه بارها در روابط، کار یا تصمیم‌هایتان تکرار می‌شود، بررسی تخصصی‌تر می‌تواند مفید باشد.»</p><h4>نکته علمی</h4><p>این یک نقشه خودمشاهده‌گری است، نه خودتشخیصی. پنج جمله، ابزار آموزشی هستند و از مقاله‌ای نقل نشده‌اند.</p><h4>انتقال به اسلاید بعد</h4><p>«و اگر این الگو در شما تکرارشونده است...»</p></template></section>
 <section class="slide dark" id="s20" aria-label="دعوت" data-n="20">
   <h1 class="t">شناختن چرخه با تغییر دادن آن فرق دارد.</h1>
-  <p class="cta1">اگر این الگو برای شما تکرارشونده است،<br>موضوع فقط «فهمیدن» نیست.</p>
-  <p class="cta2">لازم است ببینیم چرخه در زندگی واقعی شما:</p>
-  <ul class="cta3"><li>کجا شروع می‌شود؟</li><li>چطور حفظ می‌شود؟</li><li>و چرا دوباره تکرار می‌شود؟</li></ul>
-  <p class="cta4">محرک ← احساس ← منتقد ← نیاز ← پاسخ ← اقدام</p><template class="notes"><h4>هدف اسلاید</h4><p>یک دعوت آرام و غیرفروشنده برای بررسی دقیق‌تر در صورت تکرارشونده بودن الگو.</p><h4>متن پیشنهادی ارائه</h4><p>«اگر امروز متوجه شدید که این فقط یک واکنش مقطعی نیست و این چرخه در روابط، کار یا تصمیم‌های شما بارها تکرار می‌شود، ارزش دارد آن را دقیق‌تر بررسی کنید.</p><p>در فضای فردی می‌توانیم مشخص کنیم محرک چیست، چه احساسی پشت آن وجود دارد، منتقد درونی چه می‌گوید، چه نیازی نادیده گرفته می‌شود و چرا رسیدن از احساس به اقدام سخت می‌شود.</p><p>این وبینار قرار نیست جای کار فردی را بگیرد؛ قرار است کمک کند مسئله را واضح‌تر ببینید.»</p><h4>نکته علمی</h4><p>این اسلاید ادعای پژوهشی ندارد. از عبارت‌هایی مانند «همین حالا رزرو کنید»، «ظرفیت محدود»، «درمان تضمینی» و «من مشکل شما را حل می‌کنم» پرهیز کنید.</p><h4>انتقال به اسلاید بعد</h4><p>«پایان کار؛ منابع را برای مطالعه بیشتر روی اسلاید بعد می‌گذارم.»</p></template></section>
+  <p class="cta1" data-f="1">اگر این الگو برای شما تکرارشونده است،<br>موضوع فقط «فهمیدن» نیست.</p>
+  <p class="cta2" data-f="2">لازم است ببینیم چرخه در زندگی واقعی شما:</p>
+  <ul class="cta3"><li data-f="2" style="--d:0.5s">کجا شروع می‌شود؟</li><li data-f="2" style="--d:1s">چطور حفظ می‌شود؟</li><li data-f="2" style="--d:1.5s">و چرا دوباره تکرار می‌شود؟</li></ul>
+  <p class="cta4" data-f="3">محرک ← احساس ← منتقد ← نیاز ← پاسخ ← اقدام</p><template class="notes"><h4>هدف اسلاید</h4><p>یک دعوت آرام و غیرفروشنده برای بررسی دقیق‌تر در صورت تکرارشونده بودن الگو.</p><h4>متن پیشنهادی ارائه</h4><p>«اگر امروز متوجه شدید که این فقط یک واکنش مقطعی نیست و این چرخه در روابط، کار یا تصمیم‌های شما بارها تکرار می‌شود، ارزش دارد آن را دقیق‌تر بررسی کنید.</p><p>در فضای فردی می‌توانیم مشخص کنیم محرک چیست، چه احساسی پشت آن وجود دارد، منتقد درونی چه می‌گوید، چه نیازی نادیده گرفته می‌شود و چرا رسیدن از احساس به اقدام سخت می‌شود.</p><p>این وبینار قرار نیست جای کار فردی را بگیرد؛ قرار است کمک کند مسئله را واضح‌تر ببینید.»</p><h4>نکته علمی</h4><p>این اسلاید ادعای پژوهشی ندارد. از عبارت‌هایی مانند «همین حالا رزرو کنید»، «ظرفیت محدود»، «درمان تضمینی» و «من مشکل شما را حل می‌کنم» پرهیز کنید.</p><h4>انتقال به اسلاید بعد</h4><p>«پایان کار؛ منابع را برای مطالعه بیشتر روی اسلاید بعد می‌گذارم.»</p></template></section>
 <section class="slide " id="s21" aria-label="منابع" data-n="21">
   <h1 class="t">منابع اصلی</h1>
-  <div class="refs" dir="ltr"><div class="ref"><b>Šoková, B., Greškovičová, K., Halamová, J., et al. (2025).</b><span>Breaking the vicious cycles of self-criticism: a qualitative study on the best practices of overcoming one's inner critic.</span><i>BMC Psychology, 13, 266.</i><u>DOI: 10.1186/s40359-024-02250-2</u></div><div class="ref"><b>Oblak, A., Rigler, S., Kovačič, N., et al. (2026).</b><span>The lifeworld of people who ruminate: a qualitative phenomenological study.</span><i>Frontiers in Psychiatry, 17, 1649971.</i><u>DOI: 10.3389/fpsyt.2026.1649971</u></div><div class="ref"><b>Khan, S., Rehna, T., &amp; Butt, T. A. (2024).</b><span>The emotional surge: in-depth qualitative exploration of rumination and emotional turbulence in non-suicidal self-injurers.</span><i>Frontiers in Psychology, 15, 1449110.</i><u>DOI: 10.3389/fpsyg.2024.1449110</u></div></div>
-  <p class="foot low sm">مقاله سوم روی جمعیت NSSI انجام شده و یافته‌های آن نباید به مخاطب عمومی تعمیم مستقیم داده شوند.</p><template class="notes"><h4>هدف اسلاید</h4><p>شفافیت درباره منابع و محدودیت‌ها.</p><h4>متن پیشنهادی ارائه</h4><p>«این سه مقاله منابع اصلی امروز هستند. اگر خواستید بیشتر بخوانید، شناسه DOI هر کدام را داده‌ام. یک نکته را دوباره تأکید می‌کنم: مقاله سوم روی افراد دارای NSSI انجام شده و نباید مستقیم به همه مخاطبان تعمیم داده شود. از همراهی‌تان ممنونم.»</p><h4>نکته علمی</h4><p>هر سه مقاله پژوهش کیفی هستند. چارچوب‌های دو مسیر، فرمول و مسیر پنج‌مرحله‌ای ترکیب آموزشی وبینار است. سایر مفاهیم (مثل سوپرایگوی تنبیه‌گر) چارچوب نظری روان‌کاوانه هستند، نه یافته این سه پژوهش.</p><h4>انتقال به اسلاید بعد</h4><p>پایان ارائه؛ پرسش و پاسخ.</p></template></section>
+  <div class="refs stg" dir="ltr"><div class="ref"><b>Šoková, B., Greškovičová, K., Halamová, J., et al. (2025).</b><span>Breaking the vicious cycles of self-criticism: a qualitative study on the best practices of overcoming one's inner critic.</span><i>BMC Psychology, 13, 266.</i><u>DOI: 10.1186/s40359-024-02250-2</u></div><div class="ref"><b>Oblak, A., Rigler, S., Kovačič, N., et al. (2026).</b><span>The lifeworld of people who ruminate: a qualitative phenomenological study.</span><i>Frontiers in Psychiatry, 17, 1649971.</i><u>DOI: 10.3389/fpsyt.2026.1649971</u></div><div class="ref"><b>Khan, S., Rehna, T., &amp; Butt, T. A. (2024).</b><span>The emotional surge: in-depth qualitative exploration of rumination and emotional turbulence in non-suicidal self-injurers.</span><i>Frontiers in Psychology, 15, 1449110.</i><u>DOI: 10.3389/fpsyg.2024.1449110</u></div></div>
+  <p class="foot low sm" >مقاله سوم روی جمعیت NSSI انجام شده و یافته‌های آن نباید به مخاطب عمومی تعمیم مستقیم داده شوند.</p><template class="notes"><h4>هدف اسلاید</h4><p>شفافیت درباره منابع و محدودیت‌ها.</p><h4>متن پیشنهادی ارائه</h4><p>«این سه مقاله منابع اصلی امروز هستند. اگر خواستید بیشتر بخوانید، شناسه DOI هر کدام را داده‌ام. یک نکته را دوباره تأکید می‌کنم: مقاله سوم روی افراد دارای NSSI انجام شده و نباید مستقیم به همه مخاطبان تعمیم داده شود. از همراهی‌تان ممنونم.»</p><h4>نکته علمی</h4><p>هر سه مقاله پژوهش کیفی هستند. چارچوب‌های دو مسیر، فرمول و مسیر پنج‌مرحله‌ای ترکیب آموزشی وبینار است. سایر مفاهیم (مثل سوپرایگوی تنبیه‌گر) چارچوب نظری روان‌کاوانه هستند، نه یافته این سه پژوهش.</p><h4>انتقال به اسلاید بعد</h4><p>پایان ارائه؛ پرسش و پاسخ.</p></template></section>
 </div></div>
+<div id="ov" hidden aria-label="نمای کلی اسلایدها"></div>
 <aside id="notes" aria-label="یادداشت سخنران" hidden></aside>
 <nav id="chrome" aria-label="ناوبری">
-  <button id="next" aria-label="اسلاید بعد">‹</button>
+  <button id="next" aria-label="مرحله بعد">‹</button>
   <span id="count">۱ / ۲۱</span>
-  <button id="prev" aria-label="اسلاید قبل">›</button>
-  <span class="hint">← → ناوبری · N یادداشت · F تمام‌صفحه</span>
+  <button id="prev" aria-label="مرحله قبل">›</button>
+  <button id="ovbtn" aria-label="نمای کلی">▦</button>
+  <span class="hint">← → ناوبری · O نمای کلی · N یادداشت · F تمام‌صفحه</span>
 </nav>
 <script>(function () {
-  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
-  var stage = document.getElementById("stage");
-  var notes = document.getElementById("notes");
-  var count = document.getElementById("count");
-  var cur = 0, notesOn = false, idle;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var fa = function (n) { return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+  var store = {
+    get: function (k) { try { return JSON.parse(localStorage.getItem("deck:" + k)); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem("deck:" + k, JSON.stringify(v)); } catch (e) {} },
+    del: function (k) { try { localStorage.removeItem("deck:" + k); } catch (e) {} }
+  };
 
+  var stage = $("#stage"), slides = $$(".slide", stage), N = slides.length;
+  var notes = $("#notes"), count = $("#count"), bar = $("#bar i"), ov = $("#ov");
+  var cur = 0, notesOn = false, idle, ovBuilt = false, timer = null;
+
+  /* ---------- fragments ---------- */
+  slides.forEach(function (s) {
+    var frs = $$("[data-f]", s);
+    frs.forEach(function (el) { el.classList.add("fr"); });
+    var gs = [];
+    frs.forEach(function (el) { var g = +el.dataset.f; if (gs.indexOf(g) < 0) gs.push(g); });
+    gs.sort(function (a, b) { return a - b; });
+    s._frs = frs; s._g = gs; s._k = 0;
+    $$(".stg", s).forEach(function (c) { $$(":scope > *", c).forEach(function (ch, i) { ch.style.setProperty("--i", i); }); });
+  });
+  function reveal(s, k) {
+    s._k = k;
+    var lim = k === 0 ? -1 : s._g[k - 1];
+    s._frs.forEach(function (el) { el.classList.toggle("on", +el.dataset.f <= lim); });
+    updateCount();
+  }
+  function updateCount() {
+    var s = slides[cur];
+    count.textContent = fa(cur + 1) + " / " + fa(N) + (s._g.length ? "  ·  " + fa(s._k) + "/" + fa(s._g.length) : "");
+  }
+
+  /* ---------- scaling / navigation ---------- */
   function fit() {
     var vw = window.innerWidth, vh = window.innerHeight * (notesOn ? 0.6 : 1);
-    var s = Math.min(vw / 1920, vh / 1080);
-    stage.style.transform = "translate(" + (vw - 1920 * s) / 2 + "px," + (vh - 1080 * s) / 2 + "px) scale(" + s + ")";
+    var sc = Math.min(vw / 1920, vh / 1080);
+    stage.style.transform = "translate(" + (vw - 1920 * sc) / 2 + "px," + (vh - 1080 * sc) / 2 + "px) scale(" + sc + ")";
+    if (!ov.hidden) scaleThumbs();
   }
-  function show(i) {
-    cur = Math.max(0, Math.min(slides.length - 1, i));
+  function show(i, mode) {
+    stopTimer();
+    cur = Math.max(0, Math.min(N - 1, i));
     slides.forEach(function (s, k) {
       s.classList.toggle("active", k === cur);
       s.setAttribute("aria-hidden", k === cur ? "false" : "true");
     });
-    count.textContent = fa(cur + 1) + " / " + fa(slides.length);
+    var s = slides[cur];
+    reveal(s, mode === "fwd" ? 0 : s._g.length);
+    bar.style.width = ((cur + 1) / N) * 100 + "%";
     try { history.replaceState(null, "", "#" + (cur + 1)); } catch (e) {}
-    var t = slides[cur].querySelector("template.notes");
+    var t = s.querySelector("template.notes");
     notes.innerHTML = t ? t.innerHTML : "";
     notes.scrollTop = 0;
+  }
+  function next() {
+    var s = slides[cur];
+    if (s._k < s._g.length) reveal(s, s._k + 1);
+    else if (cur < N - 1) show(cur + 1, "fwd");
+  }
+  function prev() {
+    var s = slides[cur];
+    if (s._k > 0) reveal(s, s._k - 1);
+    else if (cur > 0) show(cur - 1, "all");
   }
   function toggleNotes() {
     notesOn = !notesOn;
@@ -386,39 +586,234 @@ body.notes-on #chrome{bottom:calc(40vh + 10px)}
   function nudge() {
     document.body.classList.add("show-chrome");
     clearTimeout(idle);
-    idle = setTimeout(function () { document.body.classList.remove("show-chrome"); }, 2500);
+    idle = setTimeout(function () { document.body.classList.remove("show-chrome"); }, 2600);
   }
 
+  /* ---------- overview ---------- */
+  function buildOv() {
+    ov.innerHTML = "";
+    slides.forEach(function (s, i) {
+      var th = document.createElement("div");
+      th.className = "th"; th.setAttribute("role", "button"); th.tabIndex = 0;
+      th.setAttribute("aria-label", "اسلاید " + fa(i + 1) + ": " + (s.getAttribute("aria-label") || ""));
+      th.dataset.i = i;
+      var c = s.cloneNode(true);
+      c.removeAttribute("id"); c.classList.remove("active"); c.setAttribute("aria-hidden", "true");
+      $$("template", c).forEach(function (t) { t.remove(); });
+      $$("[id]", c).forEach(function (e) { e.removeAttribute("id"); });
+      $$("[data-f]", c).forEach(function (e) { e.classList.add("on"); });
+      $$("textarea", c).forEach(function (e) { e.tabIndex = -1; });
+      $$("button", c).forEach(function (e) { e.tabIndex = -1; });
+      th.appendChild(c);
+      ov.appendChild(th);
+    });
+    ovBuilt = true;
+  }
+  function scaleThumbs() {
+    $$(".th", ov).forEach(function (th, i) {
+      var sc = th.clientWidth / 1920;
+      th.firstChild.style.transform = "scale(" + sc + ")";
+      th.classList.toggle("cur", i === cur);
+    });
+  }
+  function openOv() {
+    if (!ovBuilt) buildOv();
+    ov.hidden = false;
+    scaleThumbs();
+    var c = $(".th.cur", ov); if (c && c.scrollIntoView) c.scrollIntoView({ block: "center" });
+  }
+  function closeOv() { ov.hidden = true; }
+  ov.addEventListener("click", function (e) {
+    var th = e.target.closest(".th");
+    if (th) { closeOv(); show(+th.dataset.i, "all"); }
+    else if (e.target === ov) closeOv();
+  });
+  ov.addEventListener("keydown", function (e) {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("th")) { e.preventDefault(); e.target.click(); }
+  });
+
+  /* ---------- timer ---------- */
+  function fmt(sec) { var m = Math.floor(sec / 60), s = sec % 60; return fa((m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s); }
+  function stopTimer() {
+    if (timer) { clearInterval(timer); timer = null; }
+    var b = $('[data-act="timer"]'); if (b) b.textContent = "شروع";
+  }
+  function startTimer() {
+    var tm = $("#tm"); if (!tm) return;
+    if (timer) { stopTimer(); return; }
+    var left = tm.dataset.left ? +tm.dataset.left : +tm.dataset.sec;
+    if (left <= 0) left = +tm.dataset.sec;
+    tm.classList.remove("done");
+    $('[data-act="timer"]').textContent = "توقف";
+    timer = setInterval(function () {
+      left--; tm.dataset.left = left; tm.textContent = fmt(Math.max(left, 0));
+      if (left <= 0) { stopTimer(); tm.classList.add("done"); }
+    }, 1000);
+  }
+  function resetTimer() {
+    stopTimer();
+    var tm = $("#tm"); if (!tm) return;
+    tm.dataset.left = tm.dataset.sec; tm.textContent = fmt(+tm.dataset.sec); tm.classList.remove("done");
+  }
+
+  /* ---------- selections ---------- */
+  var SUG = [
+    [["قدم ۲ | احساس را نام ببر", 16]],
+    [["تمرین ۱ | آخرین باری که خودتان را سرزنش کردید", 9], ["قدم‌های ۱ و ۴ | منتقد را ببین، از خودت محافظت کن", 16]],
+    [["تمرین ۲ | این فکر واقعاً به کجا می‌رود؟", 13], ["قدم ۳ | نیاز را پیدا کن", 16]],
+    [["قدم ۵ | به اقدام برس", 16]],
+    [["شناختن چرخه با تغییر دادن آن فرق دارد", 20]]
+  ];
+  var DEF5 = "روی هر کارت بزنید.";
+  function applySingle(box, idx, save) {
+    var picks = $$(".pick", box);
+    picks.forEach(function (p, i) { p.classList.toggle("sel", i === idx); p.setAttribute("aria-pressed", i === idx ? "true" : "false"); });
+    box.classList.toggle("has-sel", idx >= 0);
+    if (save && box.dataset.key) { if (idx >= 0) store.set(box.dataset.key, idx); else store.del(box.dataset.key); }
+    if (box.dataset.detail) {
+      var d = document.getElementById(box.dataset.detail);
+      d.textContent = idx >= 0 ? picks[idx].dataset.pick : DEF5;
+      d.classList.toggle("on", idx >= 0);
+    }
+    if (box.dataset.result) {
+      var r = document.getElementById(box.dataset.result);
+      if (idx >= 0) {
+        r.hidden = false;
+        r.innerHTML = '<span class="lbl">نزدیک‌ترین الگو در اسلاید ۶:</span><bdi dir="ltr" class="ty">' + picks[idx].dataset.t + '</bdi><button class="chip" data-go="6">دیدن</button>';
+      } else r.hidden = true;
+    }
+    if (box.dataset.sug) {
+      var s = document.getElementById("sug");
+      if (idx >= 0) {
+        s.hidden = false; s.classList.remove("on"); void s.offsetWidth; s.classList.add("on");
+        s.innerHTML = '<span class="lbl">پیشنهاد آموزشی وبینار:</span>' + SUG[idx].map(function (x) {
+          return '<button class="chip" data-go="' + x[1] + '">' + x[0] + "</button>";
+        }).join("");
+      } else s.hidden = true;
+    }
+  }
+  function applyMulti(box, arr) {
+    $$(".pick", box).forEach(function (p, i) { var on = arr.indexOf(i) >= 0; p.classList.toggle("sel", on); p.setAttribute("aria-pressed", on ? "true" : "false"); });
+    var t = $("#t6");
+    if (t) { t.hidden = arr.length === 0; t.textContent = "«" + fa(arr.length) + " صدای آشنا»"; }
+  }
+  function applyYN(list, st, save) {
+    $$("li", list).forEach(function (li, i) {
+      $$("[data-yn]", li).forEach(function (b) { b.classList.toggle("on", st[i] !== undefined && st[i] !== null && +b.dataset.yn === st[i]); });
+    });
+    var anyNo = st.some(function (v) { return v === 0; });
+    var c = $("#c13"); if (c) { c.classList.toggle("lit", anyNo); c.classList.toggle("dim", !anyNo); }
+    if (save) store.set(list.dataset.key, st);
+  }
+
+  stage.addEventListener("click", function (e) {
+    var t = e.target;
+    var pick = t.closest(".pick");
+    if (pick) {
+      var box = pick.parentNode;
+      var picks = $$(".pick", box), i = picks.indexOf(pick);
+      if (box.classList.contains("multi")) {
+        var arr = picks.map(function (p, k) { return p.classList.contains("sel") ? k : -1; }).filter(function (k) { return k >= 0; });
+        var at = arr.indexOf(i); if (at >= 0) arr.splice(at, 1); else arr.push(i);
+        store.set(box.dataset.key, arr); applyMulti(box, arr);
+      } else {
+        applySingle(box, pick.classList.contains("sel") ? -1 : i, true);
+      }
+      if (e.detail > 0) pick.blur();
+      return;
+    }
+    var yn = t.closest("[data-yn]");
+    if (yn) {
+      var list = yn.closest("ol"), st = (store.get(list.dataset.key) || [null, null, null]).slice();
+      var q = +yn.dataset.q, v = +yn.dataset.yn;
+      st[q] = st[q] === v ? null : v;
+      applyYN(list, st, true);
+      if (e.detail > 0) yn.blur();
+      return;
+    }
+    if (t.closest("#c13")) { $("#c13").classList.add("lit"); $("#c13").classList.remove("dim"); return; }
+    var fo = t.closest("[data-focus]");
+    if (fo && fo.classList.contains("chip")) {
+      $$(".chips .chip", fo.closest(".slide")).forEach(function (c) { c.classList.toggle("on", c === fo); });
+      $(".two", fo.closest(".slide")).dataset.focus = fo.dataset.focus;
+      if (e.detail > 0) fo.blur();
+      return;
+    }
+    var go = t.closest("[data-go]");
+    if (go) { show(+go.dataset.go - 1, "all"); return; }
+    var act = t.closest("[data-act]");
+    if (act) {
+      var a = act.dataset.act;
+      if (a === "timer") startTimer();
+      else if (a === "timer-reset") resetTimer();
+      else if (a === "print") {
+        var s = slides[cur];
+        s.classList.add("print-target"); document.body.classList.add("print-one");
+        var done = function () { s.classList.remove("print-target"); document.body.classList.remove("print-one"); window.removeEventListener("afterprint", done); };
+        window.addEventListener("afterprint", done);
+        window.print();
+      } else if (a === "clear") {
+        $$("textarea", stage).forEach(function (ta) { ta.value = ""; store.del(ta.dataset.k); });
+      }
+      if (e.detail > 0) act.blur();
+    }
+  });
+  stage.addEventListener("input", function (e) {
+    if (e.target.tagName === "TEXTAREA" && e.target.dataset.k) store.set(e.target.dataset.k, e.target.value);
+  });
+
+  function restore() {
+    $$(".single[data-key]", stage).forEach(function (box) {
+      var v = store.get(box.dataset.key);
+      applySingle(box, typeof v === "number" ? v : -1, false);
+    });
+    $$(".cards.single:not([data-key])", stage).forEach(function (box) { applySingle(box, -1, false); });
+    $$(".multi[data-key]", stage).forEach(function (box) { applyMulti(box, store.get(box.dataset.key) || []); });
+    $$("ol.qs[data-key]", stage).forEach(function (l) { applyYN(l, store.get(l.dataset.key) || [null, null, null], false); });
+    $$("textarea[data-k]", stage).forEach(function (ta) { var v = store.get(ta.dataset.k); if (typeof v === "string") ta.value = v; });
+    resetTimer();
+  }
+
+  /* ---------- input ---------- */
   document.addEventListener("keydown", function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var tg = e.target, tn = tg.tagName;
+    if (tn === "TEXTAREA" || tn === "INPUT") { if (e.key === "Escape") tg.blur(); return; }
     var k = e.key;
-    if (k === "ArrowLeft" || k === "PageDown" || k === " " || k === "Enter" || k === "ArrowDown") { e.preventDefault(); show(cur + 1); }
-    else if (k === "ArrowRight" || k === "PageUp" || k === "Backspace" || k === "ArrowUp") { e.preventDefault(); show(cur - 1); }
-    else if (k === "Home") show(0);
-    else if (k === "End") show(slides.length - 1);
+    if (!ov.hidden) { if (k === "Escape" || k === "o" || k === "O") { closeOv(); } return; }
+    var onBtn = tn === "BUTTON" || (tg.getAttribute && tg.getAttribute("role") === "button");
+    if ((k === "Enter" || k === " ") && onBtn) return; // let the focused control act
+    if (k === "ArrowLeft" || k === "PageDown" || k === " " || k === "Enter" || k === "ArrowDown") { e.preventDefault(); next(); }
+    else if (k === "ArrowRight" || k === "PageUp" || k === "Backspace" || k === "ArrowUp") { e.preventDefault(); prev(); }
+    else if (k === "Home") show(0, "fwd");
+    else if (k === "End") show(N - 1, "all");
     else if (k === "f" || k === "F") fullscreen();
     else if (k === "n" || k === "N") toggleNotes();
+    else if (k === "o" || k === "O") openOv();
+    else if (k === "Escape" && notesOn) toggleNotes();
   });
-  document.getElementById("next").addEventListener("click", function () { show(cur + 1); });
-  document.getElementById("prev").addEventListener("click", function () { show(cur - 1); });
+  $("#next").addEventListener("click", next);
+  $("#prev").addEventListener("click", prev);
+  $("#ovbtn").addEventListener("click", function () { ov.hidden ? openOv() : closeOv(); });
   document.addEventListener("mousemove", nudge);
-  var x0 = null;
-  document.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; nudge(); }, { passive: true });
+  var x0 = null, y0 = null;
+  document.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; nudge(); }, { passive: true });
   document.addEventListener("touchend", function (e) {
     if (x0 === null) return;
-    var dx = e.changedTouches[0].clientX - x0;
-    if (Math.abs(dx) > 50) show(dx < 0 ? cur + 1 : cur - 1); // swipe left = next (RTL)
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && ov.hidden) { if (dx < 0) next(); else prev(); } // swipe left = next (RTL)
     x0 = null;
   }, { passive: true });
   window.addEventListener("resize", fit);
   window.addEventListener("hashchange", function () {
     var n = parseInt(location.hash.slice(1), 10);
-    if (n) show(n - 1);
+    if (n && n - 1 !== cur) show(n - 1, "all");
   });
 
   var start = parseInt(location.hash.slice(1), 10);
+  restore();
   fit();
-  show(start ? start - 1 : 0);
+  show(start ? start - 1 : 0, start ? "all" : "fwd");
   nudge();
 })();
 </script>
